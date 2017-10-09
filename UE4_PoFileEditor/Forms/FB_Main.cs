@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using SettingsController;
 using UE4_PoFileEditor.Class;
 using System.Globalization;
+using UE4_PoFileEditor.Forms;
 
 namespace UE4_PoFileEditor
 {
@@ -350,6 +351,12 @@ namespace UE4_PoFileEditor
                     }
                 }
             }
+        }
+
+        private void BN_OpenViewer_Click(object sender, EventArgs e)
+        {
+            Viewer NewViewer = new Viewer();
+            NewViewer.Show();
         }
     }
 }

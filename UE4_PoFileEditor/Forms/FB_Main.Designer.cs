@@ -52,6 +52,7 @@
             this.BN_ConvertPoToCsv = new System.Windows.Forms.Button();
             this.BN_LoadLanguageFromProject = new System.Windows.Forms.Button();
             this.BN_CreatePoFiles = new System.Windows.Forms.Button();
+            this.BN_OpenViewer = new System.Windows.Forms.Button();
             this.GB_UE4_General.SuspendLayout();
             this.GB_LocalizationCSV.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NU_SetCell)).BeginInit();
@@ -93,6 +94,7 @@
             this.GB_LocalizationCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GB_LocalizationCSV.Controls.Add(this.BN_OpenViewer);
             this.GB_LocalizationCSV.Controls.Add(this.LB_SetCell);
             this.GB_LocalizationCSV.Controls.Add(this.NU_SetCell);
             this.GB_LocalizationCSV.Controls.Add(this.LIVI_LanguageCell);
@@ -326,6 +328,17 @@
             this.BN_CreatePoFiles.UseVisualStyleBackColor = true;
             this.BN_CreatePoFiles.Click += new System.EventHandler(this.BN_CreatePoFiles_Click);
             // 
+            // BN_OpenViewer
+            // 
+            this.BN_OpenViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BN_OpenViewer.Location = new System.Drawing.Point(290, 123);
+            this.BN_OpenViewer.Name = "BN_OpenViewer";
+            this.BN_OpenViewer.Size = new System.Drawing.Size(150, 56);
+            this.BN_OpenViewer.TabIndex = 19;
+            this.BN_OpenViewer.Text = "Open Viewer";
+            this.BN_OpenViewer.UseVisualStyleBackColor = true;
+            this.BN_OpenViewer.Click += new System.EventHandler(this.BN_OpenViewer_Click);
+            // 
             // FB_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -372,6 +385,7 @@
         private System.Windows.Forms.ColumnHeader Co_LanguageCell;
         private System.Windows.Forms.Label LB_SetCell;
         private System.Windows.Forms.NumericUpDown NU_SetCell;
+        private System.Windows.Forms.Button BN_OpenViewer;
     }
 }
 

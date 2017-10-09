@@ -59,6 +59,12 @@
     <Compile Include="Forms\FB_Main.Designer.cs">
       <DependentUpon>FB_Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Viewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Viewer.Designer.cs">
+      <DependentUpon>Viewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\FB_Main.resx">
