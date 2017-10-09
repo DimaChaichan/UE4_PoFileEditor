@@ -8,6 +8,27 @@ namespace UE4_PoFileEditor.Class
 {
     public class PoFileValues
     {
+        // Porperties
+        public string Key { get; set; }
+        public string SourceLocation { get; set; }
+        public string Comment { get; set; }
+        public string msgctxt { get; set; }
+        public string msgid { get; set; }
+        public string msgstr { get; set; }
+        public bool valid { get; set; }
+
+        public PoFileValues()
+        {
+             Key = "";
+             SourceLocation = "";
+             Comment = "";
+             msgctxt = "";
+             msgid = "";
+             msgstr = "";
+             valid = true;
+        }
+
+        // Create 
         public PoFileValues(string Data , bool CsvData = false)
         {
             valid = false;
@@ -17,12 +38,12 @@ namespace UE4_PoFileEditor.Class
                 string[] SplitData = Data.Split(new[] { "\n" }, StringSplitOptions.None);
                 if (SplitData.Length > 5 && SplitData[0].IndexOf("Key:") != -1)
                 {
-                    Key = SplitData[0].Replace("#. Key:", "").Replace("\t", "");
-                    SourceLocation = SplitData[1].Replace("#. SourceLocation:", "").Replace("\t", "");
-                    Comment = SplitData[2].Replace("#: ", "").Replace("\t", "");
-                    msgctxt = SplitData[3].Replace("msgctxt ", "").Replace("\t", "");
-                    msgid = SplitData[4].Replace("msgid ", "").Replace("\t", "");
-                    msgstr = SplitData[5].Replace("msgstr ", "").Replace("\t", "");
+                    Key = SplitData[0].Replace("#. Key:", "").Replace("\t", "").Replace("\r", "");
+                    SourceLocation = SplitData[1].Replace("#. SourceLocation:", "").Replace("\t", "").Replace("\r", "");
+                    Comment = SplitData[2].Replace("#: ", "").Replace("\t", "").Replace("\r", "");
+                    msgctxt = SplitData[3].Replace("msgctxt ", "").Replace("\t", "").Replace("\r", "");
+                    msgid = SplitData[4].Replace("msgid ", "").Replace("\t", "").Replace("\r", "");
+                    msgstr = SplitData[5].Replace("msgstr ", "").Replace("\t", "").Replace("\r", "");
 
                     valid = true;
                 }
@@ -49,7 +70,7 @@ namespace UE4_PoFileEditor.Class
             }
         }
 
-
+        // Export Strings
         public string ExportCsvString ()
         {
             return msgid + "\t" + msgstr + "\t" + msgctxt + "\t" + "Key:" + Key + "SourceLocation:" + SourceLocation;
@@ -58,22 +79,14 @@ namespace UE4_PoFileEditor.Class
         public string ExportPoString ()
         {
             string RetrunString = "";
-            RetrunString = RetrunString + "#. Key:	" + Key + Environment.NewLine;
-            RetrunString = RetrunString + "#. SourceLocation:	" + SourceLocation + Environment.NewLine;
-            RetrunString = RetrunString + "#: " + Comment + Environment.NewLine;
-            RetrunString = RetrunString + "msgctxt " + msgctxt + Environment.NewLine;
-            RetrunString = RetrunString + "msgid " + msgid + Environment.NewLine;
-            RetrunString = RetrunString + "msgstr " + msgstr + Environment.NewLine;
+            RetrunString = RetrunString + "#. Key:	" + Key + "\n"; // + Environment.NewLine;
+            RetrunString = RetrunString + "#. SourceLocation:	" + SourceLocation + "\n";
+            RetrunString = RetrunString + "#: " + Comment + "\n";
+            RetrunString = RetrunString + "msgctxt " + msgctxt + "\n";
+            RetrunString = RetrunString + "msgid " + msgid + "\n";
+            RetrunString = RetrunString + "msgstr " + msgstr + "\n";
             return RetrunString;
         }
-
-        public string Key { get; set; }
-        public string SourceLocation { get; set; }
-        public string Comment { get; set; }
-        public string msgctxt { get; set; }
-        public string msgid { get; set; }
-        public string msgstr { get; set; }
-        public bool valid { get; set; }
 
     }
 }

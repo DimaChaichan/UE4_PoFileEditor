@@ -19,13 +19,13 @@ namespace UE4_PoFileEditor.Class
         {
             if (Path.Exists)
             {
-                LoadPoFile(Path, "\n\n");
+                LoadPoFile(Path);
             }
         }
 
         public void SaveFile(FileInfo SavePath)
         {
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(SavePath.FullName, true))
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(SavePath.FullName))
             {
                 foreach (PoFileValues Value in Values)
                 {
@@ -34,12 +34,15 @@ namespace UE4_PoFileEditor.Class
             }
         }
 
-        private void LoadPoFile(FileInfo Path, string SplitChar)
+        private void LoadPoFile(FileInfo Path)
         {
             if (Path.Exists)
             {
                 string Data = File.ReadAllText(Path.FullName);
-                string[] DataValues = Data.Split(new[] { SplitChar }, StringSplitOptions.None);
+                string[] DataValues = Data.Split(new[] { "\n\n" }, StringSplitOptions.None);
+                if(DataValues.Length <= 1)
+                   DataValues = Data.Split(new[] { "\n\r\n" }, StringSplitOptions.None);
+
                 foreach (var Value in DataValues)
                 {
                     PoFileValues poFileValue = new PoFileValues(Value);

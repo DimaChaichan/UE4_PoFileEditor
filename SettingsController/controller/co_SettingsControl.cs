@@ -51,17 +51,18 @@ namespace SettingsController
         /// <returns>string List all Keeys(string)</returns>
         public List<string> GetKeys(string category)
         {
-            byte[] buffer = new byte[2048];
-            GetPrivateProfileSection(category, buffer, 2048, path);
-            String[] tmp = Encoding.ASCII.GetString(buffer).Trim('\0').Split('\0');
+            byte[] buffer = new byte[16096];
+            GetPrivateProfileSection(category, buffer, 16096, path);
+            string[] tmp = Encoding.ASCII.GetString(buffer).Trim('\0').Split('\0');
 
             List<string> result = new List<string>();
 
             if (tmp[0] != "")
             {
-                foreach (String entry in tmp)
+                foreach (string entry in tmp)
                 {
-                    result.Add(entry.Substring(0, entry.IndexOf("=")));
+                    if(entry.IndexOf("=") != -1)
+                        result.Add(entry.Substring(0, entry.IndexOf("=")));
                 }
             }
 

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SettingsController;
 using UE4_PoFileEditor.Class;
+using System.Globalization;
 
 namespace UE4_PoFileEditor
 {
@@ -36,6 +37,9 @@ namespace UE4_PoFileEditor
             TXBX_UE4LocalizationPath.Text = UE4LocalizationPath.FullName;
             TXBX_MainPoFile.Text = UE4MainPoFile.FullName;
             TXBX_LocalizationCSV.Text = LocalizationCSV.FullName;
+
+            // Load Languges
+            LoadLanguage();
         }
 
 
@@ -133,6 +137,219 @@ namespace UE4_PoFileEditor
             }
         }
 
+        private void BN_TestLocalizationFile_Click(object sender, EventArgs e)
+        {
+            FileInfo LocalizationFileInfo = (FileInfo)settingsControl.GetValue("LocalizationCSV");
+            if (LocalizationFileInfo.Exists)
+            {
+                List<LanguageCell> Lang = new List<LanguageCell>();
+                List<cl_ListKeyInt> languageListCell = (List<cl_ListKeyInt>)settingsControl.GetValue("LanguageListCellID");
+                foreach (cl_ListKeyInt item in languageListCell)
+                {
+                    Lang.Add(new LanguageCell(item.Key, item.value));
+                }
 
+                LocalizationFile NewLocalizationFileInfo = new LocalizationFile(LocalizationFileInfo, Lang, 2);
+                if (NewLocalizationFileInfo.LanguageValues.Count > 0)
+                {
+                    MessageBox.Show("Localization File is ok!");
+                    return;
+                }
+            }
+            MessageBox.Show("Localization File is broken!");
+        }
+
+        private void BN_SaveSettings_Click(object sender, EventArgs e)
+        {
+            List<cl_ListKeyBool> Languages = new List<cl_ListKeyBool>();
+            for (int i = 0; i < CHBX_Language.Items.Count; i++)
+            {
+                cl_ListKeyBool NewListKeyBool = new cl_ListKeyBool(CHBX_Language.Items[i].ToString(), CHBX_Language.GetItemChecked(i));
+                Languages.Add(NewListKeyBool);
+            }
+            settingsControl.SetValue("LanguageListID", Languages);
+
+            List<cl_ListKeyInt> languageListCell = new List<cl_ListKeyInt>();
+            foreach (ListViewItem item in LIVI_LanguageCell.Items)
+            {
+                int value = Int32.Parse(item.SubItems[1].Text);
+                cl_ListKeyInt NewListKeyInt = new cl_ListKeyInt(item.Text, value);
+                languageListCell.Add(NewListKeyInt);
+            }
+            settingsControl.SetValue("LanguageListCellID", languageListCell);
+            settingsControl.WriteAllValues();
+
+            MessageBox.Show("Settings Saved!");
+        }
+
+        private void BN_LoadLanguageFromProject_Click(object sender, EventArgs e)
+        {
+            DirectoryInfo ProjectPath = (DirectoryInfo)settingsControl.GetValue("UE4LocalizationPath");
+            List<cl_ListKeyBool> Languages = new List<cl_ListKeyBool>();
+            foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
+            {
+                if (ci.Name != "")
+                    Languages.Add(new cl_ListKeyBool(ci.Name, false));
+            }
+
+            if (ProjectPath.Exists)
+            {
+                string[] subdirectoryEntries = Directory.GetDirectories(ProjectPath.FullName);
+                foreach (string subdirectory in subdirectoryEntries)
+                {
+                    DirectoryInfo CheckLanguage = new DirectoryInfo(subdirectory);
+                    foreach (cl_ListKeyBool lang in Languages)
+                    {
+                        if (lang.Key == CheckLanguage.Name)
+                            lang.Bool = true;
+                    }
+                }
+
+                settingsControl.SetValue("LanguageListID", Languages);
+                settingsControl.WriteAllValues();
+
+                LoadLanguage();
+            }
+                
+        }
+
+        private void BN_CreatePoFiles_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog FindPoFile = new OpenFileDialog();
+            FindPoFile.Filter = "*.po (*.po )|*.po";
+            FindPoFile.InitialDirectory = TXBX_UE4LocalizationPath.Text;
+            if (FindPoFile.ShowDialog() == DialogResult.OK)
+            {
+                FileInfo PoFileInfo = new FileInfo(FindPoFile.FileName);
+                PoFile NewPoFile = new PoFile(PoFileInfo);
+
+                FolderBrowserDialog objDialog = new FolderBrowserDialog();
+                objDialog.Description = "Choose the Project localization path";
+                objDialog.SelectedPath = FindPoFile.FileName;
+                DialogResult objResult = objDialog.ShowDialog(this);
+                if (objResult == DialogResult.OK)
+                {
+                    FileInfo LocalizationFileInfo = (FileInfo)settingsControl.GetValue("LocalizationCSV");
+                    if (LocalizationFileInfo.Exists)
+                    {
+                        List<LanguageCell> Lang = new List<LanguageCell>();
+                        List<cl_ListKeyInt> languageListCell = (List<cl_ListKeyInt>)settingsControl.GetValue("LanguageListCellID");
+                        foreach (cl_ListKeyInt item in languageListCell)
+                        {
+                            Lang.Add(new LanguageCell(item.Key, item.value));
+                        }
+
+                        LocalizationFile NewLocalizationFileInfo = new LocalizationFile(LocalizationFileInfo, Lang, 2);
+                        if (NewLocalizationFileInfo.LanguageValues.Count > 0)
+                        {
+                            foreach (LanguageCell Language in NewLocalizationFileInfo.Languages)
+                            {
+                                PoFile NewLanguagePoFile = Utilities.CreatePofileFromLocalizationCSV(NewLocalizationFileInfo, Language.Language);
+                                PoFile CombineLanguagePoFile = Utilities.CombinePoFiles(NewPoFile, NewLanguagePoFile);
+
+                                FileInfo ToSavePo = new FileInfo(Path.Combine(objDialog.SelectedPath, Language.Language, FindPoFile.SafeFileName));
+                                if (!ToSavePo.Directory.Exists)
+                                    Directory.CreateDirectory(ToSavePo.Directory.FullName);
+
+                                CombineLanguagePoFile.SaveFile(ToSavePo);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void LIVI_LanguageCell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(LIVI_LanguageCell.SelectedItems.Count > 0 && LIVI_LanguageCell.SelectedItems[0].SubItems.Count > 0)
+                NU_SetCell.Value = Int32.Parse(LIVI_LanguageCell.SelectedItems[0].SubItems[1].Text);
+        }
+
+        private void NU_SetCell_ValueChanged(object sender, EventArgs e)
+        {
+            LIVI_LanguageCell.SelectedItems[0].SubItems[1].Text = NU_SetCell.Value.ToString();
+        }
+
+        private void LoadLanguage()
+        {
+            // Clear 
+            CHBX_Language.Items.Clear();
+            LIVI_LanguageCell.Items.Clear();
+
+            List<cl_ListKeyInt> languageListCell = (List<cl_ListKeyInt>)settingsControl.GetValue("LanguageListCellID");
+            // Set Language
+            foreach (cl_ListKeyBool ci in (List<cl_ListKeyBool>)settingsControl.GetValue("LanguageListID"))
+            {
+                if (ci.Key != "")
+                {
+                    CHBX_Language.Items.Add(ci.Key, ci.Bool);
+
+                    if (ci.Bool)
+                    {
+                        ListViewItem NewItem = new ListViewItem(ci.Key);
+                        
+                        bool found = false;
+                        foreach (cl_ListKeyInt item in languageListCell)
+                        {
+                            if(item.Key == ci.Key)
+                            {
+                                NewItem.SubItems.Add(item.value.ToString());
+                                LIVI_LanguageCell.Items.Add(NewItem);
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            NewItem.SubItems.Add("0");
+                            LIVI_LanguageCell.Items.Add(NewItem);
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+
+        private void CHBX_Language_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (CHBX_Language.SelectedIndex != -1)
+            {
+                // Remove Item
+                if (CHBX_Language.GetItemCheckState(CHBX_Language.SelectedIndex) == CheckState.Checked)
+                {
+                    foreach (ListViewItem item in LIVI_LanguageCell.Items)
+                    {
+                        string Check_01 = CHBX_Language.Items[CHBX_Language.SelectedIndex].ToString();
+                        string Check_02 = item.Text;
+                        if (Check_01 == Check_02)
+                        {
+                            LIVI_LanguageCell.Items.Remove(item);
+                            break;
+                        }
+                    }
+                }
+
+                // Add Item
+                if (CHBX_Language.GetItemCheckState(CHBX_Language.SelectedIndex) == CheckState.Unchecked)
+                {
+                    bool found = false;
+                    foreach (ListViewItem item in LIVI_LanguageCell.Items)
+                    {
+                        string Check_01 = CHBX_Language.Items[CHBX_Language.SelectedIndex].ToString();
+                        string Check_02 = item.Text;
+                        if (Check_01 == Check_02)
+                            found = true;
+                    }
+
+                    if (!found)
+                    {
+                        ListViewItem NewItem = new ListViewItem(CHBX_Language.Items[CHBX_Language.SelectedIndex].ToString());
+                        NewItem.SubItems.Add("0");
+                        LIVI_LanguageCell.Items.Add(NewItem);
+                    }
+                }
+            }
+        }
     }
 }

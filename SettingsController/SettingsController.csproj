@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="class\cl_ListIntValue.cs" />
+    <Compile Include="class\cl_ListKeyInt.cs" />
+    <Compile Include="class\cl_ListKeyBool.cs" />
     <Compile Include="class\cl_StatusColor.cs" />
     <Compile Include="class\cl_value.cs" />
     <Compile Include="controller\co_SettingsControl.cs" />

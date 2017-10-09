@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -21,11 +22,27 @@ namespace SettingsController
             SettingsValue UE4LocalizationPath = new SettingsValue("Paths", "UE4LocalizationPath", new DirectoryInfo(@"c:\\"));
             SettingsValue UE4MainPoFile = new SettingsValue("Paths", "UE4MainPoFile", new FileInfo(@"c:\\"));
             SettingsValue LocalizationCSV = new SettingsValue("Paths", "LocalizationCSV", new FileInfo(@"c:\\"));
-            
+
+
+            List<cl_ListKeyBool> languageList = new List<cl_ListKeyBool>();
+            foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
+            {
+                if (ci.Name != "")
+                    languageList.Add(new cl_ListKeyBool(ci.Name, false));
+            }
+
+            SettingsValue LanguageList = new SettingsValue("LanguageList", "LanguageListID", languageList);
+
+            List<cl_ListKeyInt> languageListCell = new List<cl_ListKeyInt>();
+            SettingsValue LanguageCellList = new SettingsValue("LanguageListCell", "LanguageListCellID", languageListCell);
+
             // Add Values
             this.Add(UE4LocalizationPath);
             this.Add(UE4MainPoFile);
             this.Add(LocalizationCSV);
+
+            this.Add(LanguageCellList);
+            this.Add(LanguageList);
         }
 
         /// <summary>

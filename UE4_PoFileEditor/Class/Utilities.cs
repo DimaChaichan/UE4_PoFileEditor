@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace UE4_PoFileEditor.Class
         /// <param name="CsvFile">To Save CSV-File</param>
         static public void ConvertAndSavePoToCsv(PoFile ToConvertPoFile, FileInfo CsvFile)
         {
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(CsvFile.FullName, true))
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(CsvFile.FullName))
             {
                 foreach (PoFileValues Value in ToConvertPoFile.Values)
                 {
@@ -42,5 +43,41 @@ namespace UE4_PoFileEditor.Class
             return RetrunPoFile;
         }
 
+        static public PoFile CreatePofileFromLocalizationCSV (LocalizationFile localizationFile, string Language)
+        {
+            PoFile RetrunPoFile = new PoFile();
+            CultureInfo LanguageInfo = new CultureInfo(Language);
+            foreach (LocalizationFileLanguageListValues Values in localizationFile.LanguageValues)
+            {
+                string NewValue = Values.GetValueFromLanguage(LanguageInfo);
+                if(NewValue != "--1")
+                {
+                    PoFileValues poFileValue = new PoFileValues();
+                    poFileValue.Key = Values.Key;
+                    poFileValue.msgctxt = "\"," + Values.Key + "\"";
+                    poFileValue.msgstr = "\"" + NewValue + "\"";
+
+                    RetrunPoFile.Values.Add(poFileValue);
+                }
+            }
+
+            return RetrunPoFile;
+        }
+
+        static public PoFile CombinePoFiles (PoFile SourceFile, PoFile ToCombine)
+        {
+            PoFile RetrunPoFile = new PoFile();
+            foreach (PoFileValues Values in SourceFile.Values)
+            {
+                PoFileValues FindValue = ToCombine.Values.Find(x => x.Key == Values.Key);
+                if (FindValue != null)
+                {
+                    Values.msgstr = FindValue.msgstr;
+                }
+                RetrunPoFile.Values.Add(Values);
+            }
+
+            return RetrunPoFile;
+        }
     }
 }

@@ -71,6 +71,9 @@ namespace SettingsController
 
                             Setvalue.Settingsvalue = (MetroColorStyle)Convert.ToInt32(GetValue);
                             break;
+                        case "System.String":
+                            Setvalue.Settingsvalue = GetValue;
+                            break;
                         case "System.Int32":
 
                             if (GetValue == "")
@@ -104,8 +107,43 @@ namespace SettingsController
                             // Debug
                             //Console.WriteLine(s);
 
-                            switch(s)
+                            switch (s)
                             {
+                                case "SettingsController.cl_ListKeyInt":
+                                    List<cl_ListKeyInt> KeysIntStr = (List<cl_ListKeyInt>)Setvalue.Settingsvalue;
+                                    List<string> KeysIntStrGroup = new List<string>();
+                                    KeysIntStrGroup = settingsFileControl.GetKeys(Setvalue.Group);
+                                    foreach (string item in KeysIntStrGroup)
+                                    {
+                                        string Int_ListKeyBool = settingsFileControl.IniReadValue(Setvalue.Group, item);
+                                        KeysIntStr.Add(new cl_ListKeyInt(item, Int32.Parse(Int_ListKeyBool)));
+                                    }
+                                    Setvalue.Settingsvalue = KeysIntStr;
+                                    break;
+                                case "SettingsController.cl_ListKeyBool":
+                                    List<cl_ListKeyBool> KeysStr = (List<cl_ListKeyBool>)Setvalue.Settingsvalue;
+                                    List<string> KeysStrGroup = new List<string>();
+                                    KeysStrGroup = settingsFileControl.GetKeys(Setvalue.Group);
+                                    foreach (cl_ListKeyBool item in KeysStr)
+                                    {
+                                        foreach (string Key_ListKeyBool in KeysStrGroup)
+                                        {
+                                            if(item.Key == Key_ListKeyBool)
+                                            {
+                                                string Bool_ListKeyBool = settingsFileControl.IniReadValue(Setvalue.Group, Key_ListKeyBool);
+                                                if (Bool_ListKeyBool == "True")
+                                                    item.Bool = true;
+                                                else
+                                                    item.Bool = false;
+                                            }
+                                        }
+                                    }
+                                    Setvalue.Settingsvalue = KeysStr;
+                                    break;
+                                case "System.String":
+                                    List<string> IDValueStr = (List<string>)Setvalue.Settingsvalue;
+                                    Setvalue.Settingsvalue = IDValueStr;
+                                    break;
                                 case "System.Int32":
                                     List<int> IDList = (List<int>)Setvalue.Settingsvalue;
                                     List<int> NewIDList = new List<int>();
@@ -249,8 +287,12 @@ namespace SettingsController
 
         public object GetValue(string ValueName)
         {
-            return Settingsvalues.Find(x => x.Name == ValueName).Settingsvalue;
-        }
+            object value = Settingsvalues.Find(x => x.Name == ValueName);
+            if (value != null)
+                return Settingsvalues.Find(x => x.Name == ValueName).Settingsvalue;
+            else
+                return false;
+        }   
 
         public void SetValue(string ValueName, object NewValue)
         {
@@ -290,7 +332,28 @@ namespace SettingsController
                          Console.Write(s + Environment.NewLine);
                          switch(s)
                          {
-                             case "System.Int32":
+                            case "SettingsController.cl_ListKeyInt":
+                                List<cl_ListKeyInt> KeysIntStr = (List<cl_ListKeyInt>)Setvalue.Settingsvalue;
+                                for (int i = 0; i < KeysIntStr.Count; i++)
+                                {
+                                    settingsFileControl.IniWriteValue(Setvalue.Group, KeysIntStr[i].Key, KeysIntStr[i].value.ToString());
+                                }
+                                break;
+                            case "SettingsController.cl_ListKeyBool":
+                                List<cl_ListKeyBool> KeysStr = (List<cl_ListKeyBool>)Setvalue.Settingsvalue;
+                                for (int i = 0; i < KeysStr.Count; i++)
+                                {
+                                    settingsFileControl.IniWriteValue(Setvalue.Group, KeysStr[i].Key, KeysStr[i].Bool.ToString());
+                                }
+                                break;
+                            case "System.String":
+                                List<string> NewListStr = (List<string>)Setvalue.Settingsvalue;
+                                for (int i = 0; i < NewListStr.Count; i++)
+                                {
+                                    settingsFileControl.IniWriteValue(Setvalue.Group, NewListStr[i], i.ToString());
+                                }
+                                break;
+                            case "System.Int32":
                                  List<int> NewListInt = (List<int>)Setvalue.Settingsvalue;
                                  int Count = 0;
                                  foreach (int ID in NewListInt)
