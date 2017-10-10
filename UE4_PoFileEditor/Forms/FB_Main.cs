@@ -41,6 +41,11 @@ namespace UE4_PoFileEditor
 
             // Load Languges
             LoadLanguage();
+
+            // Load Cells
+            NU_SetKeyCell.Value = (int)settingsControl.GetValue("KeyCell");
+            NU_SetSourceCell.Value = (int)settingsControl.GetValue("SourceCell");
+            NU_SetSourceLocationCell.Value = (int)settingsControl.GetValue("SourceLocationCell");
         }
 
 
@@ -55,7 +60,8 @@ namespace UE4_PoFileEditor
             {
                 TXBX_UE4LocalizationPath.Text = objDialog.SelectedPath;
 
-                settingsControl.SetValue("UE4LocalizationPath", objDialog.SelectedPath);
+                DirectoryInfo NewPath = new DirectoryInfo(objDialog.SelectedPath);
+                settingsControl.SetValue("UE4LocalizationPath", NewPath);
                 settingsControl.WriteAllValues();
             }
         }
@@ -69,7 +75,8 @@ namespace UE4_PoFileEditor
             {
                 TXBX_MainPoFile.Text = FindPOFile.FileName;
 
-                settingsControl.SetValue("UE4MainPoFile", FindPOFile.FileName);
+                FileInfo NewPath = new FileInfo(FindPOFile.FileName);
+                settingsControl.SetValue("UE4MainPoFile", NewPath);
                 settingsControl.WriteAllValues();
             }
         }
@@ -83,7 +90,8 @@ namespace UE4_PoFileEditor
             {
                 TXBX_LocalizationCSV.Text = FindCSVFile.FileName;
 
-                settingsControl.SetValue("LocalizationCSV", FindCSVFile.FileName);
+                FileInfo NewPath = new FileInfo(FindCSVFile.FileName);
+                settingsControl.SetValue("LocalizationCSV", NewPath);
                 settingsControl.WriteAllValues();
             }
         }
@@ -143,6 +151,10 @@ namespace UE4_PoFileEditor
             FileInfo LocalizationFileInfo = (FileInfo)settingsControl.GetValue("LocalizationCSV");
             if (LocalizationFileInfo.Exists)
             {
+                int KeyCell = (int)settingsControl.GetValue("KeyCell");
+                int SourceCell = (int)settingsControl.GetValue("SourceCell");
+                int SourceLocationCell = (int)settingsControl.GetValue("SourceLocationCell");
+
                 List<LanguageCell> Lang = new List<LanguageCell>();
                 List<cl_ListKeyInt> languageListCell = (List<cl_ListKeyInt>)settingsControl.GetValue("LanguageListCellID");
                 foreach (cl_ListKeyInt item in languageListCell)
@@ -150,7 +162,8 @@ namespace UE4_PoFileEditor
                     Lang.Add(new LanguageCell(item.Key, item.value));
                 }
 
-                LocalizationFile NewLocalizationFileInfo = new LocalizationFile(LocalizationFileInfo, Lang, 2);
+
+                LocalizationFile NewLocalizationFileInfo = new LocalizationFile(LocalizationFileInfo, Lang, KeyCell, SourceCell, SourceLocationCell);
                 if (NewLocalizationFileInfo.LanguageValues.Count > 0)
                 {
                     MessageBox.Show("Localization File is ok!");
@@ -216,46 +229,45 @@ namespace UE4_PoFileEditor
 
         private void BN_CreatePoFiles_Click(object sender, EventArgs e)
         {
-            OpenFileDialog FindPoFile = new OpenFileDialog();
-            FindPoFile.Filter = "*.po (*.po )|*.po";
-            FindPoFile.InitialDirectory = TXBX_UE4LocalizationPath.Text;
-            if (FindPoFile.ShowDialog() == DialogResult.OK)
+            FileInfo PoFileInfo = (FileInfo)settingsControl.GetValue("UE4MainPoFile");
+            PoFile NewPoFile = new PoFile(PoFileInfo);
+
+            FolderBrowserDialog objDialog = new FolderBrowserDialog();
+            objDialog.Description = "Choose the Project localization path";
+            objDialog.SelectedPath = PoFileInfo.Directory.FullName;
+            DialogResult objResult = objDialog.ShowDialog(this);
+            if (objResult == DialogResult.OK)
             {
-                FileInfo PoFileInfo = new FileInfo(FindPoFile.FileName);
-                PoFile NewPoFile = new PoFile(PoFileInfo);
-
-                FolderBrowserDialog objDialog = new FolderBrowserDialog();
-                objDialog.Description = "Choose the Project localization path";
-                objDialog.SelectedPath = FindPoFile.FileName;
-                DialogResult objResult = objDialog.ShowDialog(this);
-                if (objResult == DialogResult.OK)
+                FileInfo LocalizationFileInfo = (FileInfo)settingsControl.GetValue("LocalizationCSV");
+                if (LocalizationFileInfo.Exists)
                 {
-                    FileInfo LocalizationFileInfo = (FileInfo)settingsControl.GetValue("LocalizationCSV");
-                    if (LocalizationFileInfo.Exists)
+                    List<LanguageCell> Lang = new List<LanguageCell>();
+                    List<cl_ListKeyInt> languageListCell = (List<cl_ListKeyInt>)settingsControl.GetValue("LanguageListCellID");
+                    foreach (cl_ListKeyInt item in languageListCell)
                     {
-                        List<LanguageCell> Lang = new List<LanguageCell>();
-                        List<cl_ListKeyInt> languageListCell = (List<cl_ListKeyInt>)settingsControl.GetValue("LanguageListCellID");
-                        foreach (cl_ListKeyInt item in languageListCell)
+                        Lang.Add(new LanguageCell(item.Key, item.value));
+                    }
+
+                    int KeyCell = (int)settingsControl.GetValue("KeyCell");
+                    int SourceCell = (int)settingsControl.GetValue("SourceCell");
+                    int SourceLocationCell = (int)settingsControl.GetValue("SourceLocationCell");
+                    LocalizationFile NewLocalizationFileInfo = new LocalizationFile(LocalizationFileInfo, Lang, KeyCell, SourceCell, SourceLocationCell);
+                    if (NewLocalizationFileInfo.LanguageValues.Count > 0)
+                    {
+                        foreach (LanguageCell Language in NewLocalizationFileInfo.Languages)
                         {
-                            Lang.Add(new LanguageCell(item.Key, item.value));
-                        }
+                            PoFile NewLanguagePoFile = Utilities.CreatePofileFromLocalizationCSV(NewLocalizationFileInfo, Language.Language);
+                            PoFile CombineLanguagePoFile = Utilities.CombinePoFiles(NewPoFile, NewLanguagePoFile);
 
-                        LocalizationFile NewLocalizationFileInfo = new LocalizationFile(LocalizationFileInfo, Lang, 2);
-                        if (NewLocalizationFileInfo.LanguageValues.Count > 0)
-                        {
-                            foreach (LanguageCell Language in NewLocalizationFileInfo.Languages)
-                            {
-                                PoFile NewLanguagePoFile = Utilities.CreatePofileFromLocalizationCSV(NewLocalizationFileInfo, Language.Language);
-                                PoFile CombineLanguagePoFile = Utilities.CombinePoFiles(NewPoFile, NewLanguagePoFile);
+                            FileInfo ToSavePo = new FileInfo(Path.Combine(objDialog.SelectedPath, Language.Language, PoFileInfo.Name));
+                            if (!ToSavePo.Directory.Exists)
+                                Directory.CreateDirectory(ToSavePo.Directory.FullName);
 
-                                FileInfo ToSavePo = new FileInfo(Path.Combine(objDialog.SelectedPath, Language.Language, FindPoFile.SafeFileName));
-                                if (!ToSavePo.Directory.Exists)
-                                    Directory.CreateDirectory(ToSavePo.Directory.FullName);
-
-                                CombineLanguagePoFile.SaveFile(ToSavePo);
-                            }
+                            CombineLanguagePoFile.SaveFile(ToSavePo);
                         }
                     }
+
+                    MessageBox.Show("Files are created!");
                 }
             }
         }
@@ -301,7 +313,7 @@ namespace UE4_PoFileEditor
                         }
                         if (!found)
                         {
-                            NewItem.SubItems.Add("0");
+                            NewItem.SubItems.Add((LIVI_LanguageCell.Items.Count + 5).ToString());
                             LIVI_LanguageCell.Items.Add(NewItem);
                         }
                     }
@@ -346,7 +358,7 @@ namespace UE4_PoFileEditor
                     if (!found)
                     {
                         ListViewItem NewItem = new ListViewItem(CHBX_Language.Items[CHBX_Language.SelectedIndex].ToString());
-                        NewItem.SubItems.Add("0");
+                        NewItem.SubItems.Add(CHBX_Language.Items.Count.ToString());
                         LIVI_LanguageCell.Items.Add(NewItem);
                     }
                 }
@@ -357,6 +369,62 @@ namespace UE4_PoFileEditor
         {
             Viewer NewViewer = new Viewer();
             NewViewer.Show();
+        }
+
+        private void BN_CreateLocalizationCSV_Click(object sender, EventArgs e)
+        {
+            DirectoryInfo UE4LocalizationPath = (DirectoryInfo)settingsControl.GetValue("UE4LocalizationPath");
+            string PoFileName = "VoiceOver.po";
+            int KeyCell = (int)settingsControl.GetValue("KeyCell");
+            int SourceCell = (int)settingsControl.GetValue("SourceCell");
+            int SourceLocationCell = (int)settingsControl.GetValue("SourceLocationCell");
+
+            if (UE4LocalizationPath.Exists)
+            {
+                List<LanguageCell> Languages = new List<LanguageCell>();
+                List<cl_ListKeyInt> languageListCell = (List<cl_ListKeyInt>)settingsControl.GetValue("LanguageListCellID");
+                foreach (cl_ListKeyInt item in languageListCell)
+                {
+                    Languages.Add(new LanguageCell(item.Key, item.value));
+                }
+
+                FileInfo PoFIlePath = (FileInfo)settingsControl.GetValue("UE4MainPoFile");
+
+                SaveFileDialog SaveCSV = new SaveFileDialog();
+                SaveCSV.Filter = PoFIlePath.Name.Replace(PoFIlePath.Extension, "") + ".csv (*.csv )|*.csv";
+                SaveCSV.FileName = PoFIlePath.Name.Replace(PoFIlePath.Extension, "") + ".csv";
+                SaveCSV.InitialDirectory = PoFIlePath.FullName;
+
+                if (SaveCSV.ShowDialog() == DialogResult.OK)
+                {
+                    LocalizationFile NewLocalizationFileInfo = new LocalizationFile();
+                    NewLocalizationFileInfo.KeyCell = KeyCell;
+                    NewLocalizationFileInfo.SourceLocationCell = SourceLocationCell;
+                    NewLocalizationFileInfo.SourceCell = SourceCell;
+                    NewLocalizationFileInfo.Languages = Languages;
+
+
+                    PoFile NewPoFile = new PoFile(PoFIlePath);
+                    NewLocalizationFileInfo.AddPoFileSource(NewPoFile);
+
+                    foreach (LanguageCell Language in Languages)
+                    {
+                        FileInfo PoFIleLanguagePath = new FileInfo(Path.Combine(UE4LocalizationPath.FullName, Language.Language, PoFileName));
+
+                        if (PoFIleLanguagePath.Exists)
+                        {
+                            PoFile NewPoFileLanguage = new PoFile(PoFIleLanguagePath);
+                            NewLocalizationFileInfo.AddPoFile(NewPoFileLanguage, Language);
+                        }
+                    }
+
+                    FileInfo ToSaveFile = new FileInfo(SaveCSV.FileName);
+                    NewLocalizationFileInfo.SaveFile(ToSaveFile);
+
+                    MessageBox.Show("File is saved!");
+                }
+
+            }
         }
     }
 }

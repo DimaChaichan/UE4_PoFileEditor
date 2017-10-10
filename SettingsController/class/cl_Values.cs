@@ -22,7 +22,9 @@ namespace SettingsController
             SettingsValue UE4LocalizationPath = new SettingsValue("Paths", "UE4LocalizationPath", new DirectoryInfo(@"c:\\"));
             SettingsValue UE4MainPoFile = new SettingsValue("Paths", "UE4MainPoFile", new FileInfo(@"c:\\"));
             SettingsValue LocalizationCSV = new SettingsValue("Paths", "LocalizationCSV", new FileInfo(@"c:\\"));
-
+            SettingsValue KeyCell = new SettingsValue("Cells", "KeyCell", 0);
+            SettingsValue SourceCell = new SettingsValue("Cells", "SourceCell", 1);
+            SettingsValue SourceLocationCell = new SettingsValue("Cells", "SourceLocationCell", 2);
 
             List<cl_ListKeyBool> languageList = new List<cl_ListKeyBool>();
             foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
@@ -43,6 +45,10 @@ namespace SettingsController
 
             this.Add(LanguageCellList);
             this.Add(LanguageList);
+
+            this.Add(KeyCell);
+            this.Add(SourceCell);
+            this.Add(SourceLocationCell);
         }
 
         /// <summary>

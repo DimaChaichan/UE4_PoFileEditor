@@ -1,4 +1,4 @@
-﻿using MetroFramework;
+﻿//using MetroFramework;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -49,28 +49,28 @@ namespace SettingsController
 
                     switch (TypeClass[0])
                     {
-                        case "MetroFramework.MetroThemeStyle":
-                             MetroThemeStyle NewTheme = (MetroThemeStyle)Setvalue.Settingsvalue;
-                            if (GetValue == "")
-                            {
-                                int CodeThema = (int)NewTheme;
-                                settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, CodeThema.ToString());
-                                GetValue = CodeThema.ToString();
-                            }
+                        //case "MetroFramework.MetroThemeStyle":
+                        //     MetroThemeStyle NewTheme = (MetroThemeStyle)Setvalue.Settingsvalue;
+                        //    if (GetValue == "")
+                        //    {
+                        //        int CodeThema = (int)NewTheme;
+                        //        settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, CodeThema.ToString());
+                        //        GetValue = CodeThema.ToString();
+                        //    }
 
-                            Setvalue.Settingsvalue = (MetroThemeStyle)Convert.ToInt32(GetValue);
-                            break;
-                        case "MetroFramework.MetroColorStyle":
-                            MetroColorStyle NewStyle = (MetroColorStyle)Setvalue.Settingsvalue;
-                            if (GetValue == "")
-                            {
-                                int CodeStyle = (int)NewStyle;
-                                settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, CodeStyle.ToString());
-                                GetValue = CodeStyle.ToString();
-                            }
+                        //    Setvalue.Settingsvalue = (MetroThemeStyle)Convert.ToInt32(GetValue);
+                        //    break;
+                        //case "MetroFramework.MetroColorStyle":
+                        //    MetroColorStyle NewStyle = (MetroColorStyle)Setvalue.Settingsvalue;
+                        //    if (GetValue == "")
+                        //    {
+                        //        int CodeStyle = (int)NewStyle;
+                        //        settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, CodeStyle.ToString());
+                        //        GetValue = CodeStyle.ToString();
+                        //    }
 
-                            Setvalue.Settingsvalue = (MetroColorStyle)Convert.ToInt32(GetValue);
-                            break;
+                        //    Setvalue.Settingsvalue = (MetroColorStyle)Convert.ToInt32(GetValue);
+                        //    break;
                         case "System.String":
                             Setvalue.Settingsvalue = GetValue;
                             break;
@@ -307,24 +307,24 @@ namespace SettingsController
 
                 switch (TypeClass[0])
                 {
-                    case "MetroFramework.MetroThemeStyle":
-                        MetroThemeStyle NewTheme = (MetroThemeStyle)Setvalue.Settingsvalue;
-                        int CodeTeme = (int)NewTheme;
-                        settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, CodeTeme.ToString());
-                        break;
-                    case "MetroFramework.MetroColorStyle":
-                        MetroColorStyle NewStyle = (MetroColorStyle)Setvalue.Settingsvalue;
-                        int CodeStyle = (int)NewStyle;
-                        settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, CodeStyle.ToString());
-                        break;
-                    case "System.Int32":
-                        int NewInt = (int) Setvalue.Settingsvalue;
-                        settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, NewInt.ToString());
-                        break;
-                    case "System.Boolean":
-                        bool NewBool = (bool)Setvalue.Settingsvalue;
-                        settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, NewBool.ToString());
-                        break;
+                    //case "MetroFramework.MetroThemeStyle":
+                    //    MetroThemeStyle NewTheme = (MetroThemeStyle)Setvalue.Settingsvalue;
+                    //    int CodeTeme = (int)NewTheme;
+                    //    settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, CodeTeme.ToString());
+                    //    break;
+                    //case "MetroFramework.MetroColorStyle":
+                    //    MetroColorStyle NewStyle = (MetroColorStyle)Setvalue.Settingsvalue;
+                    //    int CodeStyle = (int)NewStyle;
+                    //    settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, CodeStyle.ToString());
+                    //    break;
+                    //case "System.Int32":
+                    //    int NewInt = (int) Setvalue.Settingsvalue;
+                    //    settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, NewInt.ToString());
+                    //    break;
+                    //case "System.Boolean":
+                    //    bool NewBool = (bool)Setvalue.Settingsvalue;
+                    //    settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, NewBool.ToString());
+                    //    break;
                     case "System.Collections.Generic.List":
                          Regex rx = new Regex(@"\[(.*?)\]");
                          var v = rx.Match(TypeClass[1]);

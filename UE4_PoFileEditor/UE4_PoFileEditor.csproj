@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>PoEditor_Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -92,7 +95,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="PoEditor_Icon.ico" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SettingsController\SettingsController.csproj">
       <Project>{2239bfcf-6136-40bd-81fc-2898ddcd05ae}</Project>
