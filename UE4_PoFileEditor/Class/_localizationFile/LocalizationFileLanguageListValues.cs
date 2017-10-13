@@ -23,7 +23,7 @@ namespace UE4_PoFileEditor.Class
             string[] DataValues = data.Split(new[] { SplitChar }, StringSplitOptions.None);
             foreach (LanguageCell Language in Languages)
             {
-                if ((DataValues.Length - 1) >= KeyCell && DataValues[KeyCell] != "")
+                if ((DataValues.Length - 1) >= KeyCell && DataValues[KeyCell] != "" && (DataValues.Length - 1) >= SourceLocationCell && (DataValues.Length - 1) >= SourceValueCell)
                 {
                     LocalizationFileLanguageValue Newvalue = new LocalizationFileLanguageValue();
                     Newvalue.Key = DataValues[KeyCell].Replace(",","");
@@ -96,8 +96,8 @@ namespace UE4_PoFileEditor.Class
                     if (item.CultureInfo.Name == Language.Name)
                         return item.Value;
                 }
-                else
-                    return ReturnString;
+                //else
+                //    return ReturnString;
             }
 
             return ReturnString;

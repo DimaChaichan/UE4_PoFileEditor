@@ -68,6 +68,9 @@ namespace UE4_PoFileEditor.Class
                     if (poFileValue.msgstr.Substring(poFileValue.msgstr.Length - 1) == "\"")
                         poFileValue.msgstr = poFileValue.msgstr.Remove(poFileValue.msgstr.Length - 1);
 
+                    poFileValue.SourceLocation = Values.SourceLocation;
+                    poFileValue.msgid = Values.SourceValue;
+
                     RetrunPoFile.Values.Add(poFileValue);
                 }
             }

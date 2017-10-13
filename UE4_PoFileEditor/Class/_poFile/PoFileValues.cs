@@ -96,6 +96,7 @@ namespace UE4_PoFileEditor.Class
                     valid = true;
                 }
             }
+
         }
 
         // Export Strings
