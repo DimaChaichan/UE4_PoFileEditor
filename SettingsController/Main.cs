@@ -317,14 +317,14 @@ namespace SettingsController
                     //    int CodeStyle = (int)NewStyle;
                     //    settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, CodeStyle.ToString());
                     //    break;
-                    //case "System.Int32":
-                    //    int NewInt = (int) Setvalue.Settingsvalue;
-                    //    settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, NewInt.ToString());
-                    //    break;
-                    //case "System.Boolean":
-                    //    bool NewBool = (bool)Setvalue.Settingsvalue;
-                    //    settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, NewBool.ToString());
-                    //    break;
+                    case "System.Int32":
+                        int NewInt = (int)Setvalue.Settingsvalue;
+                        settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, NewInt.ToString());
+                        break;
+                    case "System.Boolean":
+                        bool NewBool = (bool)Setvalue.Settingsvalue;
+                        settingsFileControl.IniWriteValue(Setvalue.Group, Setvalue.Name, NewBool.ToString());
+                        break;
                     case "System.Collections.Generic.List":
                          Regex rx = new Regex(@"\[(.*?)\]");
                          var v = rx.Match(TypeClass[1]);

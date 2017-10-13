@@ -55,7 +55,18 @@ namespace UE4_PoFileEditor.Class
                     PoFileValues poFileValue = new PoFileValues();
                     poFileValue.Key = Values.Key;
                     poFileValue.msgctxt = "\"," + Values.Key + "\"";
+                    if (poFileValue.msgctxt.Substring(0, 1) == "\"")
+                        poFileValue.msgctxt = poFileValue.msgctxt.Substring(1, poFileValue.msgctxt.Length - 1);
+
+                    if (poFileValue.msgctxt.Substring(poFileValue.msgctxt.Length - 1) == "\"")
+                        poFileValue.msgctxt = poFileValue.msgctxt.Remove(poFileValue.msgctxt.Length - 1);
+
                     poFileValue.msgstr = "\"" + NewValue + "\"";
+                    if (poFileValue.msgstr.Substring(0, 1) == "\"")
+                        poFileValue.msgstr = poFileValue.msgstr.Substring(1, poFileValue.msgstr.Length - 1);
+
+                    if (poFileValue.msgstr.Substring(poFileValue.msgstr.Length - 1) == "\"")
+                        poFileValue.msgstr = poFileValue.msgstr.Remove(poFileValue.msgstr.Length - 1);
 
                     RetrunPoFile.Values.Add(poFileValue);
                 }

@@ -45,7 +45,14 @@ namespace UE4_PoFileEditor.Class
             string[] DataValues = Data.Split(new[] { SplitChar }, StringSplitOptions.None);
             foreach (var Values in DataValues)
             {
-                LocalizationFileLanguageListValues NewList = new LocalizationFileLanguageListValues(Values, KeyCell, SourceCell, SourceLocationCell, Languages);
+                string ConvertValues = Values;
+                if (ConvertValues != "")
+                {
+                    if (ConvertValues.Substring(ConvertValues.Length - 1) == "\r")
+                        ConvertValues = ConvertValues.Remove(ConvertValues.Length - 1);
+                }
+
+                LocalizationFileLanguageListValues NewList = new LocalizationFileLanguageListValues(ConvertValues, KeyCell, SourceCell, SourceLocationCell, Languages);
                 if(NewList.Valid)
                     LanguageValues.Add(NewList);
             }
@@ -119,7 +126,7 @@ namespace UE4_PoFileEditor.Class
                         MaxCount = SourceLocationCell;
 
                     string WriteLine = "";
-                    for (int i = 0; i < MaxCount; i++)
+                    for (int i = 0; i <= MaxCount; i++)
                     {
                         string SaveValue = Savestring[i];
                         if (SaveValue == "XTempX")
@@ -130,6 +137,7 @@ namespace UE4_PoFileEditor.Class
                         else
                             WriteLine = WriteLine + "\t" + SaveValue;
                     }
+
 
                     WriteLine = WriteLine + "\t";
                     file.WriteLine(WriteLine);

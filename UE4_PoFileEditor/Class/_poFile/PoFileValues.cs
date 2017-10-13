@@ -35,15 +35,43 @@ namespace UE4_PoFileEditor.Class
 
             if (CsvData == false)
             {
-                string[] SplitData = Data.Split(new[] { "\n" }, StringSplitOptions.None);
-                if (SplitData.Length > 5 && SplitData[0].IndexOf("Key:") != -1)
+                List<string> SplitData = new List<string> (Data.Split(new[] { "\n" }, StringSplitOptions.None));
+                for (int i = SplitData.Count - 1; i >= 0; i--)
+                {
+                    if (SplitData[i] == "")
+                        SplitData.RemoveAt(i);
+                }
+
+
+                if (SplitData.Count > 5 && SplitData[0].IndexOf("Key:") != -1)
                 {
                     Key = SplitData[0].Replace("#. Key:", "").Replace("\t", "").Replace("\r", "");
                     SourceLocation = SplitData[1].Replace("#. SourceLocation:", "").Replace("\t", "").Replace("\r", "");
                     Comment = SplitData[2].Replace("#: ", "").Replace("\t", "").Replace("\r", "");
+
                     msgctxt = SplitData[3].Replace("msgctxt ", "").Replace("\t", "").Replace("\r", "");
+                    if (msgctxt.Substring(0, 1) == "\"")
+                        msgctxt = msgctxt.Substring(1, msgctxt.Length - 1);
+
+                    if (msgctxt.Substring(msgctxt.Length - 1) == "\"")
+                        msgctxt = msgctxt.Remove(msgctxt.Length - 1);
+
+
                     msgid = SplitData[4].Replace("msgid ", "").Replace("\t", "").Replace("\r", "");
+                    if (msgid.Substring(0, 1) == "\"")
+                        msgid = msgid.Substring(1, msgid.Length - 1);
+
+                    if (msgid.Substring(msgid.Length - 1) == "\"")
+                        msgid = msgid.Remove(msgid.Length - 1);
+
+
                     msgstr = SplitData[5].Replace("msgstr ", "").Replace("\t", "").Replace("\r", "");
+                    if (msgstr.Substring(0, 1) == "\"")
+                        msgstr = msgstr.Substring(1, msgstr.Length - 1);
+
+                    if (msgstr.Substring(msgstr.Length - 1) == "\"")
+                        msgstr = msgstr.Remove(msgstr.Length - 1);
+
 
                     valid = true;
                 }
@@ -82,10 +110,11 @@ namespace UE4_PoFileEditor.Class
             RetrunString = RetrunString + "#. Key:	" + Key + "\n"; // + Environment.NewLine;
             RetrunString = RetrunString + "#. SourceLocation:	" + SourceLocation + "\n";
             RetrunString = RetrunString + "#: " + Comment + "\n";
-            RetrunString = RetrunString + "msgctxt " + msgctxt + "\n";
-            RetrunString = RetrunString + "msgid " + msgid + "\n";
-            RetrunString = RetrunString + "msgstr " + msgstr + "\n";
+            RetrunString = RetrunString + "msgctxt \"" + msgctxt + "\"\n";
+            RetrunString = RetrunString + "msgid \"" + msgid + "\"\n";
+            RetrunString = RetrunString + "msgstr \"" + msgstr + "\"\n";
             return RetrunString;
+
         }
 
     }

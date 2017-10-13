@@ -191,8 +191,12 @@ namespace UE4_PoFileEditor
                 languageListCell.Add(NewListKeyInt);
             }
             settingsControl.SetValue("LanguageListCellID", languageListCell);
-            settingsControl.WriteAllValues();
+            // Load Cells
+            settingsControl.SetValue("KeyCell", (int) NU_SetKeyCell.Value);
+            settingsControl.SetValue("SourceCell", (int) NU_SetSourceCell.Value);
+            settingsControl.SetValue("SourceLocationCell", (int) NU_SetSourceLocationCell.Value);
 
+            settingsControl.WriteAllValues();
             MessageBox.Show("Settings Saved!");
         }
 
@@ -374,7 +378,7 @@ namespace UE4_PoFileEditor
         private void BN_CreateLocalizationCSV_Click(object sender, EventArgs e)
         {
             DirectoryInfo UE4LocalizationPath = (DirectoryInfo)settingsControl.GetValue("UE4LocalizationPath");
-            string PoFileName = "VoiceOver.po";
+            string PoFileName = UE4LocalizationPath.Name + ".po";
             int KeyCell = (int)settingsControl.GetValue("KeyCell");
             int SourceCell = (int)settingsControl.GetValue("SourceCell");
             int SourceLocationCell = (int)settingsControl.GetValue("SourceLocationCell");
@@ -402,6 +406,7 @@ namespace UE4_PoFileEditor
                     NewLocalizationFileInfo.SourceLocationCell = SourceLocationCell;
                     NewLocalizationFileInfo.SourceCell = SourceCell;
                     NewLocalizationFileInfo.Languages = Languages;
+
 
 
                     PoFile NewPoFile = new PoFile(PoFIlePath);
