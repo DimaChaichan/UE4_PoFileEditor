@@ -369,12 +369,6 @@ namespace UE4_PoFileEditor
             }
         }
 
-        private void BN_OpenViewer_Click(object sender, EventArgs e)
-        {
-            Viewer NewViewer = new Viewer();
-            NewViewer.Show();
-        }
-
         private void BN_CreateLocalizationCSV_Click(object sender, EventArgs e)
         {
             DirectoryInfo UE4LocalizationPath = (DirectoryInfo)settingsControl.GetValue("UE4LocalizationPath");
@@ -430,6 +424,14 @@ namespace UE4_PoFileEditor
                 }
 
             }
+        }
+
+        private void BN_Viewer_Click(object sender, EventArgs e)
+        {
+            FileInfo PoFileInfo = (FileInfo)settingsControl.GetValue("UE4MainPoFile");
+            PoFile NewPoFile = new PoFile(PoFileInfo);
+            Viewer NewViewer = new Viewer(NewPoFile);
+            NewViewer.Show();
         }
     }
 }

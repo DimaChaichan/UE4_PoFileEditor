@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\_DataViewerValue\DataViewerValue.cs" />
     <Compile Include="Class\_localizationFile\LanguageCell.cs" />
     <Compile Include="Class\_localizationFile\LocalizationFile.cs" />
     <Compile Include="Class\_localizationFile\LocalizationFileLanguageListValues.cs" />
@@ -72,6 +73,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\FB_Main.resx">
       <DependentUpon>FB_Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Viewer.resx">
+      <DependentUpon>Viewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
