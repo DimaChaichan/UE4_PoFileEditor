@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DAGV_DataViewer = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.DAGV_DataViewer)).BeginInit();
             this.SuspendLayout();
@@ -36,6 +37,9 @@
             // 
             this.DAGV_DataViewer.AllowUserToAddRows = false;
             this.DAGV_DataViewer.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Gainsboro;
+            this.DAGV_DataViewer.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.DAGV_DataViewer.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.DAGV_DataViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DAGV_DataViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DAGV_DataViewer.Location = new System.Drawing.Point(0, 0);

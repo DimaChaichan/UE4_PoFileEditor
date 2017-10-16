@@ -428,10 +428,25 @@ namespace UE4_PoFileEditor
 
         private void BN_Viewer_Click(object sender, EventArgs e)
         {
-            FileInfo PoFileInfo = (FileInfo)settingsControl.GetValue("UE4MainPoFile");
-            PoFile NewPoFile = new PoFile(PoFileInfo);
-            Viewer NewViewer = new Viewer(NewPoFile);
-            NewViewer.Show();
+            FileInfo LocalizationFileInfo = (FileInfo)settingsControl.GetValue("LocalizationCSV");
+            if (LocalizationFileInfo.Exists)
+            {
+                List<LanguageCell> Lang = new List<LanguageCell>();
+                List<cl_ListKeyInt> languageListCell = (List<cl_ListKeyInt>)settingsControl.GetValue("LanguageListCellID");
+                foreach (cl_ListKeyInt item in languageListCell)
+                {
+                    Lang.Add(new LanguageCell(item.Key, item.value));
+                }
+
+                int KeyCell = (int)settingsControl.GetValue("KeyCell");
+                int SourceCell = (int)settingsControl.GetValue("SourceCell");
+                int SourceLocationCell = (int)settingsControl.GetValue("SourceLocationCell");
+                LocalizationFile NewLocalizationFileInfo = new LocalizationFile(LocalizationFileInfo, Lang, KeyCell, SourceCell, SourceLocationCell);
+
+                Viewer NewViewer = new Viewer(NewLocalizationFileInfo);
+                NewViewer.Show();
+            }
+
         }
     }
 }

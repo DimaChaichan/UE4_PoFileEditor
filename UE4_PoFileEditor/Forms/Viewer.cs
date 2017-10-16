@@ -14,32 +14,63 @@ namespace UE4_PoFileEditor.Forms
 {
     public partial class Viewer : Form
     {
-        List<DataViewerValue> DataList = new List<DataViewerValue>();
-        public Viewer(PoFile SourcePoFile)
+        public Viewer(LocalizationFile Localizationfile)
         {
             InitializeComponent();
-            DataList = new List<DataViewerValue>();
 
-            foreach (PoFileValues item in SourcePoFile.Values)
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Status"); // Icon
+            dt.Columns.Add("Key");
+            dt.Columns.Add("Sourcelocation");
+            dt.Columns.Add("Source");
+            dt.Columns.Add(" "); // Spacer
+            foreach (LanguageCell item in Localizationfile.Languages)
             {
-                DataViewerValue NewValue = new DataViewerValue(item.Key, item.msgid, item.SourceLocation);
-                DataList.Add(NewValue);
+                dt.Columns.Add(item.Language);
             }
 
-            BindingList<DataViewerValue> bindingList = new BindingList<DataViewerValue>(DataList);
-            var source = new BindingSource(bindingList, null);
-            DAGV_DataViewer.DataSource = source;
+            foreach (LocalizationFileLanguageListValues Row in Localizationfile.LanguageValues)
+            {
+                List<object> newRow = new List<object>();
+                newRow.Add("");
+                newRow.Add(Row.Key);
+                newRow.Add(Row.SourceLocation);
+                newRow.Add(Row.SourceValue);
+                newRow.Add("");
+                foreach (LocalizationFileLanguageValue Cell in Row.ListValues)
+                {
+                    newRow.Add(Cell.Value);
+                }
 
-            DataGridViewColumn colSpacer = new DataGridViewTextBoxColumn();
-            colSpacer.DataPropertyName = "";
-            colSpacer.HeaderText = "";
-            colSpacer.Name = "Spacer";
-            colSpacer.DefaultCellStyle.BackColor = Color.DimGray;
-            colSpacer.ReadOnly = true;
-            colSpacer.Resizable = DataGridViewTriState.False;
-            colSpacer.Width = 5;
-            DAGV_DataViewer.Columns.Add(colSpacer);
+                dt.Rows.Add(newRow.ToArray());
+            }
+            DAGV_DataViewer.DataSource = dt;
 
+
+            //Block First Columns
+            for (int i = 0; i < 4; i++)
+            {
+                if (DAGV_DataViewer.ColumnCount > i)
+                {
+                    DAGV_DataViewer.Columns[i].ReadOnly = true;
+                    DAGV_DataViewer.Columns[i].DefaultCellStyle.BackColor = Color.LightGray;
+                    DAGV_DataViewer.Columns[i].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                }
+            }
+
+            // Icon
+            DAGV_DataViewer.Columns[0].DefaultCellStyle.BackColor = Color.DimGray;
+            DAGV_DataViewer.Columns[0].ReadOnly = true;
+            DAGV_DataViewer.Columns[0].Resizable = DataGridViewTriState.False;
+            DAGV_DataViewer.Columns[0].Width = 50;
+
+            //// Spacer
+            DAGV_DataViewer.Columns[4].DefaultCellStyle.BackColor = Color.DimGray;
+            DAGV_DataViewer.Columns[4].ReadOnly = true;
+            DAGV_DataViewer.Columns[4].Resizable = DataGridViewTriState.False;
+            DAGV_DataViewer.Columns[4].Width = 5;
+
+            DAGV_DataViewer.AutoSize = false;
         }
     }
 }
