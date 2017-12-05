@@ -448,5 +448,53 @@ namespace UE4_PoFileEditor
             }
 
         }
+
+        private void BN_CompareLocalizationCSV_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog FindCSVFile = new OpenFileDialog();
+            FindCSVFile.Filter = "*.csv (*.csv )|*.csv";
+            FindCSVFile.InitialDirectory = TXBX_LocalizationCSV.Text;
+            if (FindCSVFile.ShowDialog() == DialogResult.OK)
+            {
+                FileInfo File_01_Path = new FileInfo(FindCSVFile.FileName);
+
+                OpenFileDialog FindCSVFile_02 = new OpenFileDialog();
+                FindCSVFile_02.Filter = "*.csv (*.csv )|*.csv";
+                FindCSVFile_02.InitialDirectory = TXBX_LocalizationCSV.Text;
+                if (FindCSVFile_02.ShowDialog() == DialogResult.OK)
+                {
+                    FileInfo File_02_Path = new FileInfo(FindCSVFile_02.FileName);
+
+                    int KeyCell = (int)settingsControl.GetValue("KeyCell");
+                    int SourceCell = (int)settingsControl.GetValue("SourceCell");
+                    int SourceLocationCell = (int)settingsControl.GetValue("SourceLocationCell");
+                    List<LanguageCell> Languages = new List<LanguageCell>();
+                    List<cl_ListKeyInt> languageListCell = (List<cl_ListKeyInt>)settingsControl.GetValue("LanguageListCellID");
+                    foreach (cl_ListKeyInt item in languageListCell)
+                    {
+                        Languages.Add(new LanguageCell(item.Key, item.value));
+                    }
+
+                    LocalizationFile LocalizationFileInfo_01 = new LocalizationFile(File_01_Path, Languages, KeyCell, SourceCell, SourceLocationCell);
+                    LocalizationFile LocalizationFileInfo_02 = new LocalizationFile(File_02_Path, Languages, KeyCell, SourceCell, SourceLocationCell);
+
+                    LocalizationFile LocalizationFileInfo_Combine = Utilities.CombineLocalizationFile(LocalizationFileInfo_01, LocalizationFileInfo_02);
+
+                    SaveFileDialog SaveCSV = new SaveFileDialog();
+                    SaveCSV.Filter = File_01_Path.Name.Replace(File_01_Path.Extension, "") + ".csv (*.csv )|*.csv";
+                    SaveCSV.FileName = File_01_Path.Name.Replace(File_01_Path.Extension, "") + ".csv";
+                    SaveCSV.InitialDirectory = File_01_Path.FullName;
+
+                    if (SaveCSV.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo ToSaveFile = new FileInfo(SaveCSV.FileName);
+                        LocalizationFileInfo_Combine.SaveFile(ToSaveFile);
+
+                        MessageBox.Show("File is saved!");
+                    }
+                }
+
+            }
+        }
     }
 }

@@ -93,5 +93,55 @@ namespace UE4_PoFileEditor.Class
 
             return RetrunPoFile;
         }
+
+        static public LocalizationFile CombineLocalizationFile (LocalizationFile File_01, LocalizationFile File_02)
+        {
+            LocalizationFile NewLocalizationFileInfo = new LocalizationFile();
+            NewLocalizationFileInfo.KeyCell = File_01.KeyCell;
+            NewLocalizationFileInfo.SourceLocationCell = File_01.SourceLocationCell;
+            NewLocalizationFileInfo.SourceCell = File_01.SourceCell;
+            NewLocalizationFileInfo.Languages = File_01.Languages;
+
+            foreach (LocalizationFileLanguageListValues item in File_01.LanguageValues)
+            {
+                LocalizationFileLanguageListValues FindValue = File_02.LanguageValues.Find(x => x.SourceValue == item.SourceValue);
+                if (FindValue != null)
+                {
+                    foreach (var Value_source in item.ListValues)
+                    {
+                        foreach (var Value_combine in FindValue.ListValues)
+                        {
+                            if (Value_source.CultureInfo.DisplayName == Value_combine.CultureInfo.DisplayName)
+                            {
+                                if(Value_source.Value == "...control ourselves.\r")
+                                {
+                                    Value_source.Value = Value_combine.Value;
+                                }
+                                //if(Value_source.Value != "")
+                                //{
+                                //    Value_source.Value = Value_combine.Value;
+                                //}
+                                //else
+                                //{
+                                //    Value_source.Value = Value_combine.Value;
+                                //}
+
+                                Value_source.Value = Value_combine.Value;
+                                break;
+                            }
+                        }
+                    }
+
+                    NewLocalizationFileInfo.LanguageValues.Add(item);
+                }
+                else
+                {
+                    NewLocalizationFileInfo.LanguageValues.Add(item);
+                }
+            }
+
+
+            return NewLocalizationFileInfo;
+        }
     }
 }

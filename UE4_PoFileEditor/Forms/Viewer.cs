@@ -70,7 +70,6 @@ namespace UE4_PoFileEditor.Forms
             DAGV_DataViewer.Columns[4].Resizable = DataGridViewTriState.False;
             DAGV_DataViewer.Columns[4].Width = 5;
 
-            DAGV_DataViewer.AutoSize = false;
         }
     }
 }

@@ -32,6 +32,7 @@
             this.TXBX_UE4LocalizationPath = new System.Windows.Forms.TextBox();
             this.GB_UE4_General = new System.Windows.Forms.GroupBox();
             this.GB_LocalizationCSV = new System.Windows.Forms.GroupBox();
+            this.BN_Viewer = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -62,7 +63,7 @@
             this.BN_ConvertPoToCsv = new System.Windows.Forms.Button();
             this.BN_LoadLanguageFromProject = new System.Windows.Forms.Button();
             this.BN_CreatePoFiles = new System.Windows.Forms.Button();
-            this.BN_Viewer = new System.Windows.Forms.Button();
+            this.BN_CompareLocalizationCSV = new System.Windows.Forms.Button();
             this.GB_UE4_General.SuspendLayout();
             this.GB_LocalizationCSV.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -123,6 +124,16 @@
             this.GB_LocalizationCSV.TabIndex = 14;
             this.GB_LocalizationCSV.TabStop = false;
             this.GB_LocalizationCSV.Text = "LocalizationCSV";
+            // 
+            // BN_Viewer
+            // 
+            this.BN_Viewer.Location = new System.Drawing.Point(443, 387);
+            this.BN_Viewer.Name = "BN_Viewer";
+            this.BN_Viewer.Size = new System.Drawing.Size(114, 56);
+            this.BN_Viewer.TabIndex = 17;
+            this.BN_Viewer.Text = "Viewer";
+            this.BN_Viewer.UseVisualStyleBackColor = true;
+            this.BN_Viewer.Click += new System.EventHandler(this.BN_Viewer_Click);
             // 
             // groupBox1
             // 
@@ -368,6 +379,7 @@
             // GB_Tools
             // 
             this.GB_Tools.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.GB_Tools.Controls.Add(this.BN_CompareLocalizationCSV);
             this.GB_Tools.Controls.Add(this.BN_CreateLocalizationCSV);
             this.GB_Tools.Controls.Add(this.BN_ConvertCsvToPo);
             this.GB_Tools.Controls.Add(this.BN_ConvertPoToCsv);
@@ -383,7 +395,7 @@
             // 
             // BN_CreateLocalizationCSV
             // 
-            this.BN_CreateLocalizationCSV.Location = new System.Drawing.Point(6, 406);
+            this.BN_CreateLocalizationCSV.Location = new System.Drawing.Point(6, 339);
             this.BN_CreateLocalizationCSV.Name = "BN_CreateLocalizationCSV";
             this.BN_CreateLocalizationCSV.Size = new System.Drawing.Size(114, 56);
             this.BN_CreateLocalizationCSV.TabIndex = 16;
@@ -431,15 +443,15 @@
             this.BN_CreatePoFiles.UseVisualStyleBackColor = true;
             this.BN_CreatePoFiles.Click += new System.EventHandler(this.BN_CreatePoFiles_Click);
             // 
-            // BN_Viewer
+            // BN_CompareLocalizationCSV
             // 
-            this.BN_Viewer.Location = new System.Drawing.Point(443, 387);
-            this.BN_Viewer.Name = "BN_Viewer";
-            this.BN_Viewer.Size = new System.Drawing.Size(114, 56);
-            this.BN_Viewer.TabIndex = 17;
-            this.BN_Viewer.Text = "Viewer";
-            this.BN_Viewer.UseVisualStyleBackColor = true;
-            this.BN_Viewer.Click += new System.EventHandler(this.BN_Viewer_Click);
+            this.BN_CompareLocalizationCSV.Location = new System.Drawing.Point(6, 394);
+            this.BN_CompareLocalizationCSV.Name = "BN_CompareLocalizationCSV";
+            this.BN_CompareLocalizationCSV.Size = new System.Drawing.Size(114, 56);
+            this.BN_CompareLocalizationCSV.TabIndex = 17;
+            this.BN_CompareLocalizationCSV.Text = "Compare LocalizationCSV";
+            this.BN_CompareLocalizationCSV.UseVisualStyleBackColor = true;
+            this.BN_CompareLocalizationCSV.Click += new System.EventHandler(this.BN_CompareLocalizationCSV_Click);
             // 
             // FB_Main
             // 
@@ -505,6 +517,7 @@
         private System.Windows.Forms.NumericUpDown NU_SetSourceLocationCell;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button BN_Viewer;
+        private System.Windows.Forms.Button BN_CompareLocalizationCSV;
     }
 }
 

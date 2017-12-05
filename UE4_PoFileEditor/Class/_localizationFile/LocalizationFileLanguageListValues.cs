@@ -39,6 +39,7 @@ namespace UE4_PoFileEditor.Class
                     {
                         Newvalue.Value = DataValues[Language.Cell];
                         Newvalue.CultureInfo = new CultureInfo(Language.Language);
+                        Newvalue.Cell = Language.Cell;
                     }
 
                     ListValues.Add(Newvalue);
