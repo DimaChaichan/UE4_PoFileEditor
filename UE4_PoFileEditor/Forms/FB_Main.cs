@@ -19,6 +19,8 @@ namespace UE4_PoFileEditor
     {
         // Setup
         SettingsControl settingsControl;
+        SettingsControl PresetsFile;
+        int LastSelect = -1; 
 
         // Initialize Form
         public FB_Main()
@@ -26,7 +28,28 @@ namespace UE4_PoFileEditor
             InitializeComponent();
 
             // Get Settingsfile
-            string AppPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings.ini");
+            string PresetsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Presets.ini");
+            PresetsFile = new SettingsControl(PresetsFilePath);
+
+            // Clear 
+            List<string> Presets = (List<string>)PresetsFile.GetValue("PresetsFiles");
+            for (int i = 0; i < Presets.Count; i++)
+            {
+                FileInfo PresetFile = new FileInfo(Presets[i]);
+                LIBX_Presets.Items.Add(PresetFile.Name);
+            }
+            LIBX_Presets.SelectedIndex = 0;
+        }
+
+
+        private void LoadPreset(FileInfo Preset)
+        {
+            if (!Preset.Exists)
+            {
+                MessageBox.Show("Presetfile not exist!");
+            }
+            // Get Settingsfile
+            string AppPath = Path.Combine(Preset.FullName);
             settingsControl = new SettingsControl(AppPath);
 
             // Get All Paths
@@ -46,8 +69,9 @@ namespace UE4_PoFileEditor
             NU_SetKeyCell.Value = (int)settingsControl.GetValue("KeyCell");
             NU_SetSourceCell.Value = (int)settingsControl.GetValue("SourceCell");
             NU_SetSourceLocationCell.Value = (int)settingsControl.GetValue("SourceLocationCell");
-        }
 
+            SaveInIFile();
+        }
 
         // Form Events
         private void BN_FindLocalizationFolder_Click(object sender, EventArgs e)
@@ -175,6 +199,12 @@ namespace UE4_PoFileEditor
 
         private void BN_SaveSettings_Click(object sender, EventArgs e)
         {
+            SaveInIFile();
+            MessageBox.Show("Settings Saved!");
+        }
+
+        private void SaveInIFile()
+        {
             List<cl_ListKeyBool> Languages = new List<cl_ListKeyBool>();
             for (int i = 0; i < CHBX_Language.Items.Count; i++)
             {
@@ -192,12 +222,11 @@ namespace UE4_PoFileEditor
             }
             settingsControl.SetValue("LanguageListCellID", languageListCell);
             // Load Cells
-            settingsControl.SetValue("KeyCell", (int) NU_SetKeyCell.Value);
-            settingsControl.SetValue("SourceCell", (int) NU_SetSourceCell.Value);
-            settingsControl.SetValue("SourceLocationCell", (int) NU_SetSourceLocationCell.Value);
+            settingsControl.SetValue("KeyCell", (int)NU_SetKeyCell.Value);
+            settingsControl.SetValue("SourceCell", (int)NU_SetSourceCell.Value);
+            settingsControl.SetValue("SourceLocationCell", (int)NU_SetSourceLocationCell.Value);
 
             settingsControl.WriteAllValues();
-            MessageBox.Show("Settings Saved!");
         }
 
         private void BN_LoadLanguageFromProject_Click(object sender, EventArgs e)
@@ -236,9 +265,11 @@ namespace UE4_PoFileEditor
             FileInfo PoFileInfo = (FileInfo)settingsControl.GetValue("UE4MainPoFile");
             PoFile NewPoFile = new PoFile(PoFileInfo);
 
+            DirectoryInfo PoMainDirectors = (DirectoryInfo)settingsControl.GetValue("UE4LocalizationPath");
+
             FolderBrowserDialog objDialog = new FolderBrowserDialog();
             objDialog.Description = "Choose the Project localization path";
-            objDialog.SelectedPath = PoFileInfo.Directory.FullName;
+            objDialog.SelectedPath = PoMainDirectors.FullName;
             DialogResult objResult = objDialog.ShowDialog(this);
             if (objResult == DialogResult.OK)
             {
@@ -494,6 +525,22 @@ namespace UE4_PoFileEditor
                     }
                 }
 
+            }
+        }
+
+        private void FB_Main_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LIBX_Presets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (LastSelect != LIBX_Presets.SelectedIndex)
+            {
+                List<string> Presets = (List<string>)PresetsFile.GetValue("PresetsFiles");
+                FileInfo PresetFile = new FileInfo(Presets[LIBX_Presets.SelectedIndex]);
+                LoadPreset(PresetFile);
+                LastSelect = LIBX_Presets.SelectedIndex;
             }
         }
     }

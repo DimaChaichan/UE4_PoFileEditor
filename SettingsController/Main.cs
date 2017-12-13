@@ -141,8 +141,17 @@ namespace SettingsController
                                     Setvalue.Settingsvalue = KeysStr;
                                     break;
                                 case "System.String":
-                                    List<string> IDValueStr = (List<string>)Setvalue.Settingsvalue;
-                                    Setvalue.Settingsvalue = IDValueStr;
+                                    List<string> ItemsStringGroup = new List<string>();
+                                    ItemsStringGroup = settingsFileControl.GetKeys(Setvalue.Group);
+                                    if(ItemsStringGroup.Count == 0 )
+                                    {
+                                        List<string> IDValueStr = (List<string>)Setvalue.Settingsvalue;
+                                        Setvalue.Settingsvalue = IDValueStr;
+                                    }
+                                    else
+                                    {
+                                        Setvalue.Settingsvalue = ItemsStringGroup;
+                                    }
                                     break;
                                 case "System.Int32":
                                     List<int> IDList = (List<int>)Setvalue.Settingsvalue;

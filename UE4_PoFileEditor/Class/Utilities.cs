@@ -104,29 +104,25 @@ namespace UE4_PoFileEditor.Class
 
             foreach (LocalizationFileLanguageListValues item in File_01.LanguageValues)
             {
-                LocalizationFileLanguageListValues FindValue = File_02.LanguageValues.Find(x => x.SourceValue == item.SourceValue);
+                if (item.Key == "4578CBBF4D3D4C6FEAAA21B824BDFE99")
+                    Console.WriteLine("");
+
+                string CheckValue = item.SourceValue.Trim();
+                LocalizationFileLanguageListValues FindValue = File_02.LanguageValues.Find(x => x.SourceValue.Trim() == CheckValue);
                 if (FindValue != null)
                 {
+
+
                     foreach (var Value_source in item.ListValues)
                     {
                         foreach (var Value_combine in FindValue.ListValues)
                         {
                             if (Value_source.CultureInfo.DisplayName == Value_combine.CultureInfo.DisplayName)
                             {
-                                if(Value_source.Value == "...control ourselves.\r")
+                                if (Value_source.Value == "" && Value_combine.Value != "" && Value_source.SourceValue != Value_combine.Value)
                                 {
                                     Value_source.Value = Value_combine.Value;
                                 }
-                                //if(Value_source.Value != "")
-                                //{
-                                //    Value_source.Value = Value_combine.Value;
-                                //}
-                                //else
-                                //{
-                                //    Value_source.Value = Value_combine.Value;
-                                //}
-
-                                Value_source.Value = Value_combine.Value;
                                 break;
                             }
                         }

@@ -26,14 +26,18 @@ namespace SettingsController
             SettingsValue SourceCell = new SettingsValue("Cells", "SourceCell", 1);
             SettingsValue SourceLocationCell = new SettingsValue("Cells", "SourceLocationCell", 2);
 
+
             List<cl_ListKeyBool> languageList = new List<cl_ListKeyBool>();
             foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
             {
                 if (ci.Name != "")
                     languageList.Add(new cl_ListKeyBool(ci.Name, false));
             }
-
             SettingsValue LanguageList = new SettingsValue("LanguageList", "LanguageListID", languageList);
+
+            List<string> PresetsFilesList = new List<string>();
+            PresetsFilesList.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "default.ini"));
+            SettingsValue PresetsFiles = new SettingsValue("Preset", "PresetsFiles", PresetsFilesList);
 
             List<cl_ListKeyInt> languageListCell = new List<cl_ListKeyInt>();
             SettingsValue LanguageCellList = new SettingsValue("LanguageListCell", "LanguageListCellID", languageListCell);
@@ -42,6 +46,7 @@ namespace SettingsController
             this.Add(UE4LocalizationPath);
             this.Add(UE4MainPoFile);
             this.Add(LocalizationCSV);
+            this.Add(PresetsFiles);
 
             this.Add(LanguageCellList);
             this.Add(LanguageList);
