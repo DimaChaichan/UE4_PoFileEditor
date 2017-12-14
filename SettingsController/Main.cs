@@ -356,6 +356,7 @@ namespace SettingsController
                                 }
                                 break;
                             case "System.String":
+                                settingsFileControl.IniWriteValue(Setvalue.Group, null, null);
                                 List<string> NewListStr = (List<string>)Setvalue.Settingsvalue;
                                 for (int i = 0; i < NewListStr.Count; i++)
                                 {

@@ -36,7 +36,7 @@ namespace SettingsController
             SettingsValue LanguageList = new SettingsValue("LanguageList", "LanguageListID", languageList);
 
             List<string> PresetsFilesList = new List<string>();
-            PresetsFilesList.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "default.ini"));
+            PresetsFilesList.Add("default.ini");
             SettingsValue PresetsFiles = new SettingsValue("Preset", "PresetsFiles", PresetsFilesList);
 
             List<cl_ListKeyInt> languageListCell = new List<cl_ListKeyInt>();

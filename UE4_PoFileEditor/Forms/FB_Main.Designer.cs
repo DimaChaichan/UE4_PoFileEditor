@@ -57,7 +57,6 @@
             this.LB_LocalizationFolder = new System.Windows.Forms.Label();
             this.BN_FindLocalizationFolder = new System.Windows.Forms.Button();
             this.BN_TestLocalizationFile = new System.Windows.Forms.Button();
-            this.GB_Tools = new System.Windows.Forms.GroupBox();
             this.BN_CompareLocalizationCSV = new System.Windows.Forms.Button();
             this.BN_CreateLocalizationCSV = new System.Windows.Forms.Button();
             this.BN_ConvertCsvToPo = new System.Windows.Forms.Button();
@@ -66,6 +65,11 @@
             this.BN_CreatePoFiles = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.LIBX_Presets = new System.Windows.Forms.ListBox();
+            this.BN_AddPreset = new System.Windows.Forms.Button();
+            this.BN_RemovePreset = new System.Windows.Forms.Button();
+            this.TXBX_PresetName = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.BN_RenamePreset = new System.Windows.Forms.Button();
             this.GB_UE4_General.SuspendLayout();
             this.GB_LocalizationCSV.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -74,7 +78,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NU_SetSourceCell)).BeginInit();
             this.GB_Lan.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NU_SetCell)).BeginInit();
-            this.GB_Tools.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // TXBX_UE4LocalizationPath
@@ -85,7 +89,7 @@
             this.TXBX_UE4LocalizationPath.Location = new System.Drawing.Point(9, 35);
             this.TXBX_UE4LocalizationPath.Name = "TXBX_UE4LocalizationPath";
             this.TXBX_UE4LocalizationPath.ReadOnly = true;
-            this.TXBX_UE4LocalizationPath.Size = new System.Drawing.Size(650, 20);
+            this.TXBX_UE4LocalizationPath.Size = new System.Drawing.Size(657, 20);
             this.TXBX_UE4LocalizationPath.TabIndex = 1;
             // 
             // GB_UE4_General
@@ -102,7 +106,7 @@
             this.GB_UE4_General.Controls.Add(this.TXBX_UE4LocalizationPath);
             this.GB_UE4_General.Location = new System.Drawing.Point(163, 12);
             this.GB_UE4_General.Name = "GB_UE4_General";
-            this.GB_UE4_General.Size = new System.Drawing.Size(752, 555);
+            this.GB_UE4_General.Size = new System.Drawing.Size(759, 595);
             this.GB_UE4_General.TabIndex = 2;
             this.GB_UE4_General.TabStop = false;
             this.GB_UE4_General.Text = "Unreal 4 General";
@@ -112,26 +116,33 @@
             this.GB_LocalizationCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GB_LocalizationCSV.Controls.Add(this.BN_ConvertCsvToPo);
+            this.GB_LocalizationCSV.Controls.Add(this.BN_CompareLocalizationCSV);
+            this.GB_LocalizationCSV.Controls.Add(this.BN_ConvertPoToCsv);
             this.GB_LocalizationCSV.Controls.Add(this.BN_Viewer);
+            this.GB_LocalizationCSV.Controls.Add(this.BN_LoadLanguageFromProject);
+            this.GB_LocalizationCSV.Controls.Add(this.BN_TestLocalizationFile);
+            this.GB_LocalizationCSV.Controls.Add(this.BN_CreateLocalizationCSV);
             this.GB_LocalizationCSV.Controls.Add(this.groupBox1);
             this.GB_LocalizationCSV.Controls.Add(this.GB_Lan);
             this.GB_LocalizationCSV.Controls.Add(this.BN_SaveSettings);
+            this.GB_LocalizationCSV.Controls.Add(this.BN_CreatePoFiles);
             this.GB_LocalizationCSV.Controls.Add(this.TXBX_LocalizationCSV);
             this.GB_LocalizationCSV.Controls.Add(this.BN_FindLocalizationCsv);
             this.GB_LocalizationCSV.Controls.Add(this.LB_Language);
             this.GB_LocalizationCSV.Controls.Add(this.CHBX_Language);
             this.GB_LocalizationCSV.Location = new System.Drawing.Point(9, 99);
             this.GB_LocalizationCSV.Name = "GB_LocalizationCSV";
-            this.GB_LocalizationCSV.Size = new System.Drawing.Size(737, 449);
+            this.GB_LocalizationCSV.Size = new System.Drawing.Size(744, 489);
             this.GB_LocalizationCSV.TabIndex = 14;
             this.GB_LocalizationCSV.TabStop = false;
             this.GB_LocalizationCSV.Text = "LocalizationCSV";
             // 
             // BN_Viewer
             // 
-            this.BN_Viewer.Location = new System.Drawing.Point(168, 345);
+            this.BN_Viewer.Location = new System.Drawing.Point(166, 368);
             this.BN_Viewer.Name = "BN_Viewer";
-            this.BN_Viewer.Size = new System.Drawing.Size(144, 80);
+            this.BN_Viewer.Size = new System.Drawing.Size(144, 57);
             this.BN_Viewer.TabIndex = 17;
             this.BN_Viewer.Text = "Viewer";
             this.BN_Viewer.UseVisualStyleBackColor = true;
@@ -147,9 +158,9 @@
             this.groupBox1.Controls.Add(this.NU_SetSourceLocationCell);
             this.groupBox1.Controls.Add(this.NU_SetSourceCell);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Location = new System.Drawing.Point(318, 123);
+            this.groupBox1.Location = new System.Drawing.Point(316, 147);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(239, 171);
+            this.groupBox1.Size = new System.Drawing.Size(239, 193);
             this.groupBox1.TabIndex = 27;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Cell";
@@ -207,9 +218,9 @@
             this.GB_Lan.Controls.Add(this.LIVI_LanguageCell);
             this.GB_Lan.Controls.Add(this.NU_SetCell);
             this.GB_Lan.Controls.Add(this.LB_SetCell);
-            this.GB_Lan.Location = new System.Drawing.Point(163, 45);
+            this.GB_Lan.Location = new System.Drawing.Point(161, 45);
             this.GB_Lan.Name = "GB_Lan";
-            this.GB_Lan.Size = new System.Drawing.Size(149, 294);
+            this.GB_Lan.Size = new System.Drawing.Size(149, 317);
             this.GB_Lan.TabIndex = 24;
             this.GB_Lan.TabStop = false;
             this.GB_Lan.Text = "Language Cell";
@@ -228,7 +239,7 @@
             this.LIVI_LanguageCell.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.LIVI_LanguageCell.Location = new System.Drawing.Point(5, 19);
             this.LIVI_LanguageCell.Name = "LIVI_LanguageCell";
-            this.LIVI_LanguageCell.Size = new System.Drawing.Size(138, 230);
+            this.LIVI_LanguageCell.Size = new System.Drawing.Size(138, 253);
             this.LIVI_LanguageCell.TabIndex = 16;
             this.LIVI_LanguageCell.UseCompatibleStateImageBehavior = false;
             this.LIVI_LanguageCell.View = System.Windows.Forms.View.Details;
@@ -247,7 +258,7 @@
             // 
             this.NU_SetCell.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.NU_SetCell.Location = new System.Drawing.Point(6, 268);
+            this.NU_SetCell.Location = new System.Drawing.Point(6, 291);
             this.NU_SetCell.Name = "NU_SetCell";
             this.NU_SetCell.Size = new System.Drawing.Size(137, 20);
             this.NU_SetCell.TabIndex = 18;
@@ -257,7 +268,7 @@
             // 
             this.LB_SetCell.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LB_SetCell.AutoSize = true;
-            this.LB_SetCell.Location = new System.Drawing.Point(6, 252);
+            this.LB_SetCell.Location = new System.Drawing.Point(6, 275);
             this.LB_SetCell.Name = "LB_SetCell";
             this.LB_SetCell.Size = new System.Drawing.Size(97, 13);
             this.LB_SetCell.TabIndex = 15;
@@ -267,9 +278,9 @@
             // 
             this.BN_SaveSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BN_SaveSettings.Location = new System.Drawing.Point(318, 61);
+            this.BN_SaveSettings.Location = new System.Drawing.Point(316, 48);
             this.BN_SaveSettings.Name = "BN_SaveSettings";
-            this.BN_SaveSettings.Size = new System.Drawing.Size(413, 56);
+            this.BN_SaveSettings.Size = new System.Drawing.Size(246, 93);
             this.BN_SaveSettings.TabIndex = 13;
             this.BN_SaveSettings.Text = "Save Settings";
             this.BN_SaveSettings.UseVisualStyleBackColor = true;
@@ -283,13 +294,13 @@
             this.TXBX_LocalizationCSV.Location = new System.Drawing.Point(13, 19);
             this.TXBX_LocalizationCSV.Name = "TXBX_LocalizationCSV";
             this.TXBX_LocalizationCSV.ReadOnly = true;
-            this.TXBX_LocalizationCSV.Size = new System.Drawing.Size(637, 20);
+            this.TXBX_LocalizationCSV.Size = new System.Drawing.Size(644, 20);
             this.TXBX_LocalizationCSV.TabIndex = 7;
             // 
             // BN_FindLocalizationCsv
             // 
             this.BN_FindLocalizationCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BN_FindLocalizationCsv.Location = new System.Drawing.Point(656, 19);
+            this.BN_FindLocalizationCsv.Location = new System.Drawing.Point(663, 19);
             this.BN_FindLocalizationCsv.Name = "BN_FindLocalizationCsv";
             this.BN_FindLocalizationCsv.Size = new System.Drawing.Size(75, 23);
             this.BN_FindLocalizationCsv.TabIndex = 8;
@@ -313,7 +324,7 @@
             this.CHBX_Language.FormattingEnabled = true;
             this.CHBX_Language.Location = new System.Drawing.Point(13, 61);
             this.CHBX_Language.Name = "CHBX_Language";
-            this.CHBX_Language.Size = new System.Drawing.Size(142, 364);
+            this.CHBX_Language.Size = new System.Drawing.Size(142, 394);
             this.CHBX_Language.TabIndex = 11;
             this.CHBX_Language.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CHBX_Language_ItemCheck);
             // 
@@ -329,7 +340,7 @@
             // BN_FindMainPoFile
             // 
             this.BN_FindMainPoFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BN_FindMainPoFile.Location = new System.Drawing.Point(665, 69);
+            this.BN_FindMainPoFile.Location = new System.Drawing.Point(672, 69);
             this.BN_FindMainPoFile.Name = "BN_FindMainPoFile";
             this.BN_FindMainPoFile.Size = new System.Drawing.Size(75, 23);
             this.BN_FindMainPoFile.TabIndex = 5;
@@ -345,7 +356,7 @@
             this.TXBX_MainPoFile.Location = new System.Drawing.Point(9, 72);
             this.TXBX_MainPoFile.Name = "TXBX_MainPoFile";
             this.TXBX_MainPoFile.ReadOnly = true;
-            this.TXBX_MainPoFile.Size = new System.Drawing.Size(650, 20);
+            this.TXBX_MainPoFile.Size = new System.Drawing.Size(657, 20);
             this.TXBX_MainPoFile.TabIndex = 4;
             // 
             // LB_LocalizationFolder
@@ -360,7 +371,7 @@
             // BN_FindLocalizationFolder
             // 
             this.BN_FindLocalizationFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BN_FindLocalizationFolder.Location = new System.Drawing.Point(665, 32);
+            this.BN_FindLocalizationFolder.Location = new System.Drawing.Point(672, 32);
             this.BN_FindLocalizationFolder.Name = "BN_FindLocalizationFolder";
             this.BN_FindLocalizationFolder.Size = new System.Drawing.Size(75, 23);
             this.BN_FindLocalizationFolder.TabIndex = 2;
@@ -370,7 +381,7 @@
             // 
             // BN_TestLocalizationFile
             // 
-            this.BN_TestLocalizationFile.Location = new System.Drawing.Point(9, 222);
+            this.BN_TestLocalizationFile.Location = new System.Drawing.Point(316, 369);
             this.BN_TestLocalizationFile.Name = "BN_TestLocalizationFile";
             this.BN_TestLocalizationFile.Size = new System.Drawing.Size(114, 56);
             this.BN_TestLocalizationFile.TabIndex = 10;
@@ -378,28 +389,12 @@
             this.BN_TestLocalizationFile.UseVisualStyleBackColor = true;
             this.BN_TestLocalizationFile.Click += new System.EventHandler(this.BN_TestLocalizationFile_Click);
             // 
-            // GB_Tools
-            // 
-            this.GB_Tools.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.GB_Tools.Controls.Add(this.BN_CompareLocalizationCSV);
-            this.GB_Tools.Controls.Add(this.BN_CreateLocalizationCSV);
-            this.GB_Tools.Controls.Add(this.BN_ConvertCsvToPo);
-            this.GB_Tools.Controls.Add(this.BN_ConvertPoToCsv);
-            this.GB_Tools.Controls.Add(this.BN_LoadLanguageFromProject);
-            this.GB_Tools.Controls.Add(this.BN_CreatePoFiles);
-            this.GB_Tools.Controls.Add(this.BN_TestLocalizationFile);
-            this.GB_Tools.Location = new System.Drawing.Point(921, 12);
-            this.GB_Tools.Name = "GB_Tools";
-            this.GB_Tools.Size = new System.Drawing.Size(129, 548);
-            this.GB_Tools.TabIndex = 3;
-            this.GB_Tools.TabStop = false;
-            this.GB_Tools.Text = "Tools";
-            // 
             // BN_CompareLocalizationCSV
             // 
-            this.BN_CompareLocalizationCSV.Location = new System.Drawing.Point(6, 408);
+            this.BN_CompareLocalizationCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BN_CompareLocalizationCSV.Location = new System.Drawing.Point(569, 110);
             this.BN_CompareLocalizationCSV.Name = "BN_CompareLocalizationCSV";
-            this.BN_CompareLocalizationCSV.Size = new System.Drawing.Size(114, 56);
+            this.BN_CompareLocalizationCSV.Size = new System.Drawing.Size(170, 56);
             this.BN_CompareLocalizationCSV.TabIndex = 17;
             this.BN_CompareLocalizationCSV.Text = "Compare LocalizationCSV";
             this.BN_CompareLocalizationCSV.UseVisualStyleBackColor = true;
@@ -407,9 +402,10 @@
             // 
             // BN_CreateLocalizationCSV
             // 
-            this.BN_CreateLocalizationCSV.Location = new System.Drawing.Point(6, 353);
+            this.BN_CreateLocalizationCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BN_CreateLocalizationCSV.Location = new System.Drawing.Point(569, 48);
             this.BN_CreateLocalizationCSV.Name = "BN_CreateLocalizationCSV";
-            this.BN_CreateLocalizationCSV.Size = new System.Drawing.Size(114, 56);
+            this.BN_CreateLocalizationCSV.Size = new System.Drawing.Size(170, 56);
             this.BN_CreateLocalizationCSV.TabIndex = 16;
             this.BN_CreateLocalizationCSV.Text = "Create LocalizationCSV from Pojectfolder";
             this.BN_CreateLocalizationCSV.UseVisualStyleBackColor = true;
@@ -417,9 +413,9 @@
             // 
             // BN_ConvertCsvToPo
             // 
-            this.BN_ConvertCsvToPo.Location = new System.Drawing.Point(9, 57);
+            this.BN_ConvertCsvToPo.Location = new System.Drawing.Point(441, 368);
             this.BN_ConvertCsvToPo.Name = "BN_ConvertCsvToPo";
-            this.BN_ConvertCsvToPo.Size = new System.Drawing.Size(114, 30);
+            this.BN_ConvertCsvToPo.Size = new System.Drawing.Size(114, 57);
             this.BN_ConvertCsvToPo.TabIndex = 1;
             this.BN_ConvertCsvToPo.Text = "Csv to Po";
             this.BN_ConvertCsvToPo.UseVisualStyleBackColor = true;
@@ -427,9 +423,9 @@
             // 
             // BN_ConvertPoToCsv
             // 
-            this.BN_ConvertPoToCsv.Location = new System.Drawing.Point(9, 19);
+            this.BN_ConvertPoToCsv.Location = new System.Drawing.Point(441, 306);
             this.BN_ConvertPoToCsv.Name = "BN_ConvertPoToCsv";
-            this.BN_ConvertPoToCsv.Size = new System.Drawing.Size(114, 30);
+            this.BN_ConvertPoToCsv.Size = new System.Drawing.Size(114, 56);
             this.BN_ConvertPoToCsv.TabIndex = 0;
             this.BN_ConvertPoToCsv.Text = "Po to Csv";
             this.BN_ConvertPoToCsv.UseVisualStyleBackColor = true;
@@ -437,7 +433,7 @@
             // 
             // BN_LoadLanguageFromProject
             // 
-            this.BN_LoadLanguageFromProject.Location = new System.Drawing.Point(9, 160);
+            this.BN_LoadLanguageFromProject.Location = new System.Drawing.Point(316, 306);
             this.BN_LoadLanguageFromProject.Name = "BN_LoadLanguageFromProject";
             this.BN_LoadLanguageFromProject.Size = new System.Drawing.Size(114, 56);
             this.BN_LoadLanguageFromProject.TabIndex = 14;
@@ -447,9 +443,10 @@
             // 
             // BN_CreatePoFiles
             // 
-            this.BN_CreatePoFiles.Location = new System.Drawing.Point(6, 486);
+            this.BN_CreatePoFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BN_CreatePoFiles.Location = new System.Drawing.Point(569, 172);
             this.BN_CreatePoFiles.Name = "BN_CreatePoFiles";
-            this.BN_CreatePoFiles.Size = new System.Drawing.Size(114, 56);
+            this.BN_CreatePoFiles.Size = new System.Drawing.Size(170, 56);
             this.BN_CreatePoFiles.TabIndex = 15;
             this.BN_CreatePoFiles.Text = "Create Po Files from LocalizationCSV";
             this.BN_CreatePoFiles.UseVisualStyleBackColor = true;
@@ -473,17 +470,67 @@
             this.LIBX_Presets.TabIndex = 15;
             this.LIBX_Presets.SelectedIndexChanged += new System.EventHandler(this.LIBX_Presets_SelectedIndexChanged);
             // 
+            // BN_AddPreset
+            // 
+            this.BN_AddPreset.Location = new System.Drawing.Point(13, 181);
+            this.BN_AddPreset.Name = "BN_AddPreset";
+            this.BN_AddPreset.Size = new System.Drawing.Size(145, 47);
+            this.BN_AddPreset.TabIndex = 18;
+            this.BN_AddPreset.Text = "Add Preset";
+            this.BN_AddPreset.UseVisualStyleBackColor = true;
+            this.BN_AddPreset.Click += new System.EventHandler(this.BN_AddPreset_Click);
+            // 
+            // BN_RemovePreset
+            // 
+            this.BN_RemovePreset.Location = new System.Drawing.Point(13, 234);
+            this.BN_RemovePreset.Name = "BN_RemovePreset";
+            this.BN_RemovePreset.Size = new System.Drawing.Size(145, 47);
+            this.BN_RemovePreset.TabIndex = 19;
+            this.BN_RemovePreset.Text = "Remove Preset";
+            this.BN_RemovePreset.UseVisualStyleBackColor = true;
+            this.BN_RemovePreset.Click += new System.EventHandler(this.BN_RemovePreset_Click);
+            // 
+            // TXBX_PresetName
+            // 
+            this.TXBX_PresetName.Location = new System.Drawing.Point(6, 20);
+            this.TXBX_PresetName.Name = "TXBX_PresetName";
+            this.TXBX_PresetName.Size = new System.Drawing.Size(133, 20);
+            this.TXBX_PresetName.TabIndex = 20;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.BN_RenamePreset);
+            this.groupBox2.Controls.Add(this.TXBX_PresetName);
+            this.groupBox2.Location = new System.Drawing.Point(12, 287);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(145, 100);
+            this.groupBox2.TabIndex = 21;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Rename";
+            // 
+            // BN_RenamePreset
+            // 
+            this.BN_RenamePreset.Location = new System.Drawing.Point(6, 49);
+            this.BN_RenamePreset.Name = "BN_RenamePreset";
+            this.BN_RenamePreset.Size = new System.Drawing.Size(133, 45);
+            this.BN_RenamePreset.TabIndex = 22;
+            this.BN_RenamePreset.Text = "Rename Preset";
+            this.BN_RenamePreset.UseVisualStyleBackColor = true;
+            this.BN_RenamePreset.Click += new System.EventHandler(this.BN_RenamePreset_Click);
+            // 
             // FB_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1062, 572);
+            this.ClientSize = new System.Drawing.Size(934, 612);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.BN_RemovePreset);
+            this.Controls.Add(this.BN_AddPreset);
             this.Controls.Add(this.LIBX_Presets);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.GB_Tools);
             this.Controls.Add(this.GB_UE4_General);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(500, 350);
+            this.MinimumSize = new System.Drawing.Size(950, 650);
             this.Name = "FB_Main";
             this.Text = "Po - File Editor";
             this.Load += new System.EventHandler(this.FB_Main_Load);
@@ -499,7 +546,8 @@
             this.GB_Lan.ResumeLayout(false);
             this.GB_Lan.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NU_SetCell)).EndInit();
-            this.GB_Tools.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -516,7 +564,6 @@
         private System.Windows.Forms.Label LB_LocalizationFolder;
         private System.Windows.Forms.Button BN_FindLocalizationCsv;
         private System.Windows.Forms.TextBox TXBX_LocalizationCSV;
-        private System.Windows.Forms.GroupBox GB_Tools;
         private System.Windows.Forms.Button BN_ConvertPoToCsv;
         private System.Windows.Forms.Button BN_ConvertCsvToPo;
         private System.Windows.Forms.Button BN_TestLocalizationFile;
@@ -544,6 +591,11 @@
         private System.Windows.Forms.Button BN_CompareLocalizationCSV;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListBox LIBX_Presets;
+        private System.Windows.Forms.Button BN_AddPreset;
+        private System.Windows.Forms.Button BN_RemovePreset;
+        private System.Windows.Forms.TextBox TXBX_PresetName;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button BN_RenamePreset;
     }
 }
 

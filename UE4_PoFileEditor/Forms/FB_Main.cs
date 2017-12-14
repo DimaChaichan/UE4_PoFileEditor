@@ -31,7 +31,7 @@ namespace UE4_PoFileEditor
             string PresetsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Presets.ini");
             PresetsFile = new SettingsControl(PresetsFilePath);
 
-            // Clear 
+            // Load Presets 
             List<string> Presets = (List<string>)PresetsFile.GetValue("PresetsFiles");
             for (int i = 0; i < Presets.Count; i++)
             {
@@ -42,12 +42,17 @@ namespace UE4_PoFileEditor
         }
 
 
-        private void LoadPreset(FileInfo Preset)
+        private void LoadPreset(string PresetName, bool createNewFile = false)
         {
+            FileInfo Preset = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PresetName));
             if (!Preset.Exists)
             {
-                MessageBox.Show("Presetfile not exist!");
+                if(!createNewFile)
+                 MessageBox.Show("Presetfile not exist!");
+                else
+                 MessageBox.Show("Create a new Presetfile!");
             }
+
             // Get Settingsfile
             string AppPath = Path.Combine(Preset.FullName);
             settingsControl = new SettingsControl(AppPath);
@@ -78,7 +83,12 @@ namespace UE4_PoFileEditor
         {
             FolderBrowserDialog objDialog = new FolderBrowserDialog();
             objDialog.Description = "Choose the Project localization path";
-            objDialog.SelectedPath = @"C:\";
+            DirectoryInfo OpenDirectory = new DirectoryInfo(TXBX_UE4LocalizationPath.Text);
+            if(OpenDirectory.Exists)
+                objDialog.SelectedPath = OpenDirectory.FullName;
+            else
+                objDialog.SelectedPath = @"C:\";
+
             DialogResult objResult = objDialog.ShowDialog(this);
             if (objResult == DialogResult.OK)
             {
@@ -484,6 +494,7 @@ namespace UE4_PoFileEditor
         {
             OpenFileDialog FindCSVFile = new OpenFileDialog();
             FindCSVFile.Filter = "*.csv (*.csv )|*.csv";
+            FindCSVFile.Title = "Get current LocalizationCSV";
             FindCSVFile.InitialDirectory = TXBX_LocalizationCSV.Text;
             if (FindCSVFile.ShowDialog() == DialogResult.OK)
             {
@@ -492,6 +503,7 @@ namespace UE4_PoFileEditor
                 OpenFileDialog FindCSVFile_02 = new OpenFileDialog();
                 FindCSVFile_02.Filter = "*.csv (*.csv )|*.csv";
                 FindCSVFile_02.InitialDirectory = TXBX_LocalizationCSV.Text;
+                FindCSVFile_02.Title = "Get master LocalizationCSV";
                 if (FindCSVFile_02.ShowDialog() == DialogResult.OK)
                 {
                     FileInfo File_02_Path = new FileInfo(FindCSVFile_02.FileName);
@@ -515,6 +527,7 @@ namespace UE4_PoFileEditor
                     SaveCSV.Filter = File_01_Path.Name.Replace(File_01_Path.Extension, "") + ".csv (*.csv )|*.csv";
                     SaveCSV.FileName = File_01_Path.Name.Replace(File_01_Path.Extension, "") + ".csv";
                     SaveCSV.InitialDirectory = File_01_Path.FullName;
+                    SaveCSV.Title = "Save Compare LocalizationCSV";
 
                     if (SaveCSV.ShowDialog() == DialogResult.OK)
                     {
@@ -538,9 +551,100 @@ namespace UE4_PoFileEditor
             if (LastSelect != LIBX_Presets.SelectedIndex)
             {
                 List<string> Presets = (List<string>)PresetsFile.GetValue("PresetsFiles");
-                FileInfo PresetFile = new FileInfo(Presets[LIBX_Presets.SelectedIndex]);
-                LoadPreset(PresetFile);
+                LoadPreset(Presets[LIBX_Presets.SelectedIndex]);
                 LastSelect = LIBX_Presets.SelectedIndex;
+
+                TXBX_PresetName.Text = LIBX_Presets.Items[LIBX_Presets.SelectedIndex].ToString();
+
+                this.Text = "Po - File Editor           - " + TXBX_PresetName.Text + " -";
+            }
+           
+        }
+
+        private void BN_AddPreset_Click(object sender, EventArgs e)
+        {
+            // Add Presets
+            FileInfo NewPresetName = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "NEWPRESET" + ".ini"));
+            int FileCounter = 0;
+            while (NewPresetName.Exists)
+            {
+                NewPresetName = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "NEWPRESET_" + FileCounter + ".ini"));
+                FileCounter++;
+            }
+
+            List<string> Presets = (List<string>)PresetsFile.GetValue("PresetsFiles");
+            Presets.Add(NewPresetName.Name);
+            LIBX_Presets.Items.Add(NewPresetName.Name);
+
+            PresetsFile.SetValue("PresetsFiles", Presets);
+            PresetsFile.WriteAllValues();
+
+            LoadPreset(NewPresetName.Name, true);
+            LIBX_Presets.SelectedIndex = LIBX_Presets.Items.Count -1;
+        }
+
+        private void BN_RenamePreset_Click(object sender, EventArgs e)
+        {
+            int selectIndex = LIBX_Presets.SelectedIndex;
+            List<string> Presets = (List<string>)PresetsFile.GetValue("PresetsFiles");
+            FileInfo CurrentFile = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Presets[selectIndex]));
+            if (CurrentFile.Exists)
+            {
+                FileInfo RenameFile = new FileInfo(Path.Combine(CurrentFile.Directory.FullName, TXBX_PresetName.Text));
+                if (CurrentFile.Exists)
+                {
+                    System.IO.File.Move(CurrentFile.FullName, RenameFile.FullName);
+                    Presets[selectIndex] = RenameFile.Name;
+
+                    PresetsFile.SetValue("PresetsFiles", Presets);
+                    PresetsFile.WriteAllValues();
+
+                    LIBX_Presets.Items.Clear();
+                    for (int i = 0; i < Presets.Count; i++)
+                    {
+                        FileInfo PresetFile = new FileInfo(Presets[i]);
+                        LIBX_Presets.Items.Add(PresetFile.Name);
+                    }
+
+                    LIBX_Presets.SelectedIndex = selectIndex;
+                    LoadPreset(Presets[LIBX_Presets.SelectedIndex]);
+                    MessageBox.Show("Presetfile renamed!");
+                }
+            }
+        }
+
+        private void BN_RemovePreset_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("You are sure?", "Remove Presetfile", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                int selectIndex = LIBX_Presets.SelectedIndex;
+                List<string> Presets = (List<string>)PresetsFile.GetValue("PresetsFiles");
+                FileInfo CurrentFile = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Presets[selectIndex]));
+                if (CurrentFile.Exists)
+                {
+                    System.IO.File.Delete(CurrentFile.FullName);
+                    Presets.RemoveAt(selectIndex);
+
+                    PresetsFile.SetValue("PresetsFiles", Presets);
+                    PresetsFile.WriteAllValues();
+                    List<string> Presetsaa = (List<string>)PresetsFile.GetValue("PresetsFiles");
+
+                    LIBX_Presets.Items.Clear();
+                    for (int i = 0; i < Presets.Count; i++)
+                    {
+                        FileInfo PresetFile = new FileInfo(Presets[i]);
+                        LIBX_Presets.Items.Add(PresetFile.Name);
+                    }
+
+                    if (selectIndex == 0)
+                        LIBX_Presets.SelectedIndex = 0;
+                    else
+                        LIBX_Presets.SelectedIndex = selectIndex - 1;
+
+                    LoadPreset(Presets[LIBX_Presets.SelectedIndex]);
+                    MessageBox.Show("Presetfile Delete!");
+                }
             }
         }
     }
