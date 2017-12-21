@@ -94,7 +94,7 @@ namespace UE4_PoFileEditor.Class
             return RetrunPoFile;
         }
 
-        static public LocalizationFile CombineLocalizationFile (LocalizationFile File_01, LocalizationFile File_02)
+        static public LocalizationFile CombineLocalizationFile (LocalizationFile File_01, LocalizationFile File_02, bool UpdateKeys = false)
         {
             LocalizationFile NewLocalizationFileInfo = new LocalizationFile();
             NewLocalizationFileInfo.KeyCell = File_01.KeyCell;
@@ -104,15 +104,14 @@ namespace UE4_PoFileEditor.Class
 
             foreach (LocalizationFileLanguageListValues item in File_01.LanguageValues)
             {
-                if (item.Key == "4578CBBF4D3D4C6FEAAA21B824BDFE99")
+                string CheckValue = item.SourceValue.Trim();
+
+                if (item.Key == "D6A0199D462519E233F60DBDA1B604B2")
                     Console.WriteLine("");
 
-                string CheckValue = item.SourceValue.Trim();
                 LocalizationFileLanguageListValues FindValue = File_02.LanguageValues.Find(x => x.SourceValue.Trim() == CheckValue);
                 if (FindValue != null)
                 {
-
-
                     foreach (var Value_source in item.ListValues)
                     {
                         foreach (var Value_combine in FindValue.ListValues)
@@ -136,6 +135,37 @@ namespace UE4_PoFileEditor.Class
                 }
             }
 
+
+            if (UpdateKeys)
+            {
+                LocalizationFile NewLocalizationFileInfoKey = new LocalizationFile();
+                NewLocalizationFileInfoKey.KeyCell = File_01.KeyCell;
+                NewLocalizationFileInfoKey.SourceLocationCell = File_01.SourceLocationCell;
+                NewLocalizationFileInfoKey.SourceCell = File_01.SourceCell;
+                NewLocalizationFileInfoKey.Languages = File_01.Languages;
+
+                foreach (LocalizationFileLanguageListValues ItemUpdate in NewLocalizationFileInfo.LanguageValues)
+                {
+                    LocalizationFileLanguageListValues FindKey = File_02.LanguageValues.Find(x => x.Key == ItemUpdate.Key);
+                    if (FindKey != null)
+                    {
+                        foreach (var Value_source in ItemUpdate.ListValues)
+                        {
+                            foreach (var Value_combine in FindKey.ListValues)
+                            {
+                                if (Value_source.CultureInfo.DisplayName == Value_combine.CultureInfo.DisplayName)
+                                {
+                                    Value_source.Value = Value_combine.Value;
+                                    NewLocalizationFileInfo.LanguageValues.Add(ItemUpdate);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return NewLocalizationFileInfoKey;
+            }
 
             return NewLocalizationFileInfo;
         }
